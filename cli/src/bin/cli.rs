@@ -130,6 +130,7 @@ pub enum Commands {
 
     ViewDistributors(ViewDistributorsArgs),
     ViewDistributorByPubkey(ViewDistributorByPubkeyArgs),
+    GetSlotDurationByTime(GetSlotDurationByTimeArgs),
 }
 
 #[derive(Parser, Debug)]
@@ -531,6 +532,12 @@ pub struct ViewDistributorByPubkeyArgs {
     pub pubkey: Pubkey,
 }
 
+#[derive(Parser, Debug)]
+pub struct GetSlotDurationByTimeArgs {
+    #[clap(long)]
+    pub time_duration: u64,
+}
+
 fn main() {
     let args = Args::parse();
 
@@ -609,6 +616,9 @@ fn main() {
         }
         Commands::SetClawbackReceiver(set_clawback_receiver_argrs) => {
             process_set_clawback_receiver(&args, set_clawback_receiver_argrs)
+        }
+        Commands::GetSlotDurationByTime(get_slot_duration_by_time_args) => {
+            process_get_slot_duration_by_time(&args, get_slot_duration_by_time_args)
         }
     }
 }

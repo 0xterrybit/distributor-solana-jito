@@ -146,6 +146,13 @@ export type MerkleDistributor = {
         {
           "name": "closable",
           "type": "bool"
+<<<<<<< Updated upstream
+=======
+        },
+        {
+          "name": "locker",
+          "type": "publicKey"
+>>>>>>> Stashed changes
         }
       ]
     },
@@ -301,6 +308,13 @@ export type MerkleDistributor = {
         {
           "name": "bonusVestingSlotDuration",
           "type": "u64"
+<<<<<<< Updated upstream
+=======
+        },
+        {
+          "name": "locker",
+          "type": "publicKey"
+>>>>>>> Stashed changes
         }
       ]
     },
@@ -912,7 +926,11 @@ export type MerkleDistributor = {
             }
           },
           {
+<<<<<<< Updated upstream
             "name": "buffer0",
+=======
+            "name": "buffer1",
+>>>>>>> Stashed changes
             "docs": [
               "Buffer 0"
             ],
@@ -1116,6 +1134,14 @@ export type MerkleDistributor = {
       "code": 6020,
       "name": "CannotCloseClaimStatus",
       "msg": "Cannot close claim status"
+<<<<<<< Updated upstream
+=======
+    },
+    {
+      "code": 6021,
+      "name": "EscrowIsNotMaxLock",
+      "msg": "Escrow is not max lock"
+>>>>>>> Stashed changes
     }
   ]
 };
@@ -1268,6 +1294,13 @@ export const IDL: MerkleDistributor = {
         {
           "name": "closable",
           "type": "bool"
+<<<<<<< Updated upstream
+=======
+        },
+        {
+          "name": "locker",
+          "type": "publicKey"
+>>>>>>> Stashed changes
         }
       ]
     },
@@ -1423,6 +1456,13 @@ export const IDL: MerkleDistributor = {
         {
           "name": "bonusVestingSlotDuration",
           "type": "u64"
+<<<<<<< Updated upstream
+=======
+        },
+        {
+          "name": "locker",
+          "type": "publicKey"
+>>>>>>> Stashed changes
         }
       ]
     },
@@ -2034,7 +2074,11 @@ export const IDL: MerkleDistributor = {
             }
           },
           {
+<<<<<<< Updated upstream
             "name": "buffer0",
+=======
+            "name": "buffer1",
+>>>>>>> Stashed changes
             "docs": [
               "Buffer 0"
             ],
@@ -2238,6 +2282,14 @@ export const IDL: MerkleDistributor = {
       "code": 6020,
       "name": "CannotCloseClaimStatus",
       "msg": "Cannot close claim status"
+<<<<<<< Updated upstream
+=======
+    },
+    {
+      "code": 6021,
+      "name": "EscrowIsNotMaxLock",
+      "msg": "Escrow is not max lock"
+>>>>>>> Stashed changes
     }
   ]
 };

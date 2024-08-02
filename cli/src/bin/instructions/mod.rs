@@ -4,6 +4,8 @@ pub use process_claim::*;
 pub use process_new_claim::*;
 pub mod proccess_close_distribitor;
 pub use proccess_close_distribitor::*;
+pub mod process_get_slot_duration_by_time;
+pub use process_get_slot_duration_by_time::*;
 pub mod process_new_distributor;
 pub use process_new_distributor::*;
 pub mod process_clawback;
