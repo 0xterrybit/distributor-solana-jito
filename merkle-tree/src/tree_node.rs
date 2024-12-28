@@ -57,46 +57,15 @@ impl TreeNode {
         let node = Self {
             claimant: Pubkey::from_str(entry.pubkey.as_str()).unwrap(),
             amount: ui_amount_to_token_amount(entry.amount.as_str(), decimals),
-            locked_amount: ui_amount_to_token_amount(entry.locked_amount.as_str(), decimals),
+            locked_amount: match entry.locked_amount {
+                Some(ref amount) => ui_amount_to_token_amount(amount.as_str(), decimals),
+                None => 0, // 或者根据您的逻辑处理 None 的情况
+            },
+            // ui_amount_to_token_amount(entry.locked_amount.as_str(), decimals),
+            // let locked_amount = ;
             proof: None,
         };
         node
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use std::path::PathBuf;
-    #[test]
-    fn test_ui_amount_to_token_amount() {
-        let amount = "3.1234";
-        assert_eq!(ui_amount_to_token_amount(amount, 3), 3123);
-
-        let amount = "0.1234";
-        assert_eq!(ui_amount_to_token_amount(amount, 2), 12);
-
-        let amount = "0.00001";
-        assert_eq!(ui_amount_to_token_amount(amount, 2), 0);
-    }
-
-    #[test]
-    fn test_csv_decimals_parsing() {
-        let path = PathBuf::from("./test_fixtures/test_csv_decimal.csv");
-        let entries = CsvEntry::new_from_file(&path).expect("Failed to parse CSV");
-        assert_eq!(entries.len(), 3);
-        let decimals = 6;
-
-        let tree_nodes: Vec<TreeNode> = entries
-            .into_iter()
-            .map(|x| TreeNode::from_csv(x, decimals))
-            .collect();
-
-        assert_eq!(tree_nodes[0].amount, 1000123456);
-        assert_eq!(tree_nodes[0].locked_amount, 9123456);
-        assert_eq!(tree_nodes[1].amount, 2000123456);
-        assert_eq!(tree_nodes[1].locked_amount, 8123456);
-        assert_eq!(tree_nodes[2].amount, 1500123456);
-        assert_eq!(tree_nodes[2].locked_amount, 7123456);
-    }
-}

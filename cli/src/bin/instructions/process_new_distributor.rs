@@ -6,9 +6,9 @@ use anyhow::{Error, Result};
 use crate::*;
 
 pub fn process_new_distributor(args: &Args, new_distributor_args: &NewDistributorArgs) {
-    println!("creating new distributor with args: {new_distributor_args:#?}");
+    // println!("creating new distributor with args: {new_distributor_args:#?}");
 
-    for i in (1..10).rev() {
+    for i in (1..2).rev() {
         match create_new_distributor(args, new_distributor_args, 0, 0) {
             Ok(_) => {
                 println!("Done create all distributors");
@@ -29,51 +29,51 @@ pub fn process_new_distributor(args: &Args, new_distributor_args: &NewDistributo
     }
 }
 
-pub fn process_new_distributor_with_bonus(
-    args: &Args,
-    new_distributor_args: &NewDistributorWithBonusArgs,
-) {
-    println!("creating new distributor with args: {new_distributor_args:#?}");
+// pub fn process_new_distributor_with_bonus(
+//     args: &Args,
+//     new_distributor_args: &NewDistributorWithBonusArgs,
+// ) {
+//     println!("creating new distributor with args: {new_distributor_args:#?}");
 
-    let client = RpcClient::new_with_commitment(&args.rpc_url, CommitmentConfig::finalized());
-    let average_slot_time = get_average_slot_time(&client).unwrap();
-    let bonus_vesting_slot_duration = new_distributor_args
-        .bonus_vesting_duration
-        .checked_mul(1000)
-        .unwrap()
-        .checked_div(average_slot_time)
-        .unwrap();
+//     let client = RpcClient::new_with_commitment(&args.rpc_url, CommitmentConfig::finalized());
+//     let average_slot_time = get_average_slot_time(&client).unwrap();
+//     let bonus_vesting_slot_duration = new_distributor_args
+//         .bonus_vesting_duration
+//         .checked_mul(1000)
+//         .unwrap()
+//         .checked_div(average_slot_time)
+//         .unwrap();
 
-    for i in (1..10).rev() {
-        match create_new_distributor(
-            args,
-            &new_distributor_args.to_new_distributor_args(),
-            new_distributor_args.bonus_multiplier,
-            bonus_vesting_slot_duration,
-        ) {
-            Ok(_) => {
-                println!("Done create all distributors");
-                return;
-            }
-            Err(_) => {
-                println!(
-                    "Failed to create distributors, retrying, {} time remaining",
-                    i
-                );
-                thread::sleep(Duration::from_secs(5));
-                if i == 1 {
-                    create_new_distributor(
-                        args,
-                        &new_distributor_args.to_new_distributor_args(),
-                        new_distributor_args.bonus_multiplier,
-                        bonus_vesting_slot_duration,
-                    )
-                    .expect("Failed to create distributors");
-                }
-            }
-        }
-    }
-}
+//     for i in (1..10).rev() {
+//         match create_new_distributor(
+//             args,
+//             &new_distributor_args.to_new_distributor_args(),
+//             new_distributor_args.bonus_multiplier,
+//             bonus_vesting_slot_duration,
+//         ) {
+//             Ok(_) => {
+//                 println!("Done create all distributors");
+//                 return;
+//             }
+//             Err(_) => {
+//                 println!(
+//                     "Failed to create distributors, retrying, {} time remaining",
+//                     i
+//                 );
+//                 thread::sleep(Duration::from_secs(5));
+//                 if i == 1 {
+//                     create_new_distributor(
+//                         args,
+//                         &new_distributor_args.to_new_distributor_args(),
+//                         new_distributor_args.bonus_multiplier,
+//                         bonus_vesting_slot_duration,
+//                     )
+//                     .expect("Failed to create distributors");
+//                 }
+//             }
+//         }
+//     }
+// }
 
 fn create_new_distributor(
     args: &Args,
@@ -81,6 +81,9 @@ fn create_new_distributor(
     bonus_multiplier: u64,
     bonus_vesting_duration: u64,
 ) -> Result<()> {
+    
+    println!("program_id {} ...", &args.program_id);
+
     let client = RpcClient::new_with_commitment(&args.rpc_url, CommitmentConfig::finalized());
     let keypair = read_keypair_file(&args.keypair_path.clone().unwrap()).unwrap();
     let base = read_keypair_file(&new_distributor_args.base_path).unwrap();
@@ -113,27 +116,27 @@ fn create_new_distributor(
             &args.mint,
             merkle_tree.airdrop_version,
         );
-
-        if let Some(account) = client
-            .get_account_with_commitment(&distributor_pubkey, CommitmentConfig::confirmed())?
-            .value
-        {
-            println!(
-                "merkle distributor {} account exists, checking parameters...",
-                merkle_tree.airdrop_version
-            );
-            check_distributor_onchain_matches(
-                &account,
-                &merkle_tree,
-                new_distributor_args,
-                total_bonus,
-                bonus_vesting_duration,
-                keypair.pubkey(),
-                base.pubkey(),
-                &args,
-            ).expect("merkle root on-chain does not match provided arguments! Confirm admin and clawback parameters to avoid loss of funds!");
-            continue;
-        }
+        println!(
+            "distributor_pubkey {:?} ", distributor_pubkey
+        );
+        
+        if let Some(distributor_account) = client.get_account_with_commitment(&distributor_pubkey, CommitmentConfig::confirmed())?.value
+            {
+                println!(
+                    "merkle distributor {} account exists, checking parameters...", merkle_tree.airdrop_version
+                );
+                check_distributor_onchain_matches(
+                    &distributor_account,
+                    &merkle_tree,
+                    new_distributor_args,
+                    total_bonus,
+                    bonus_vesting_duration,
+                    keypair.pubkey(),
+                    base.pubkey(),
+                    &args,
+                ).expect("merkle root on-chain does not match provided arguments! Confirm admin and clawback parameters to avoid loss of funds!");
+                continue;
+            }
 
         let mut ixs = vec![];
 
@@ -278,21 +281,19 @@ fn create_new_distributor(
             }
 
             // double check someone didn't frontrun this transaction with a malicious merkle root
-            if let Some(account) = client
-                .get_account_with_commitment(&distributor_pubkey, CommitmentConfig::processed())?
-                .value
-            {
-                check_distributor_onchain_matches(
-                  &account,
-                  &merkle_tree,
-                  new_distributor_args,
-                  total_bonus,
-                  bonus_vesting_duration,
-                  keypair.pubkey(),
-                  base.pubkey(),
-                  args,
-              ).expect("merkle root on-chain does not match provided arguments! Confirm admin and clawback parameters to avoid loss of funds!");
-            }
+            if let Some(account) = client.get_account_with_commitment(&distributor_pubkey, CommitmentConfig::processed())?.value
+                {
+                    check_distributor_onchain_matches(
+                    &account,
+                    &merkle_tree,
+                    new_distributor_args,
+                    total_bonus,
+                    bonus_vesting_duration,
+                    keypair.pubkey(),
+                    base.pubkey(),
+                    args,
+                ).expect("merkle root on-chain does not match provided arguments! Confirm admin and clawback parameters to avoid loss of funds!");
+                }
         }
 
         if new_distributor_args.airdrop_version.is_some() {
@@ -302,6 +303,7 @@ fn create_new_distributor(
             }
         }
     }
+    
     if is_error {
         return Err(Error::msg(
             "There are some error when create merkle tree, retrying",

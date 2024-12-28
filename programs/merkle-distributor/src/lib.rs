@@ -21,17 +21,17 @@ pub mod math;
 pub mod state;
 use crate::error::ErrorCode::ArithmeticError;
 use solana_security_txt::security_txt;
-declare_id!("DiSLRwcSFvtwvMWSs7ubBMvYRaYNYupa76ZSuYLe6D7j");
+declare_id!("E15eCY61CRBGV5cSEtKyxgmkDkCLnEgqdmyPSAhuFxc6");
 
 security_txt! {
     // Required fields
     name: "Merkle Distributor",
-    project_url: "https://jup.ag/",
+    project_url: "https://rns.id/",
     contacts: "email:feedback.raccoons.dev",
-    policy: "https://github.com/jup-ag/distributor",
+    policy: "https://github.com/rns-id/distributor",
     // Optional Fields
     preferred_languages: "en",
-    source_code: "https://github.com/jup-ag/distributor"
+    source_code: "https://github.com/rns-id/distributor"
 }
 
 #[program]

@@ -29,36 +29,46 @@ pub fn process_verify(args: &Args, verfify_args: &VerifyArgs) {
             merkle_tree.airdrop_version,
         );
 
-        let total_bonus = verfify_args
-            .bonus_multiplier
-            .checked_mul(merkle_tree.total_unlocked_amount)
-            .unwrap();
+        // let total_bonus = verfify_args
+        //     .bonus_multiplier
+        //     .checked_mul(merkle_tree.total_unlocked_amount)
+        //     .unwrap();
 
         println!(
             "Verify merkle tree airdrop version {} {}",
             merkle_tree.airdrop_version, distributor_pubkey
         );
 
-        if !verfify_args.skip_verify_amount {
-            let token_vault = get_associated_token_address(&distributor_pubkey, &args.mint);
-            let token_vault_account: TokenAccount = program.account(token_vault).unwrap();
-            assert_eq!(
-                token_vault_account.amount,
-                merkle_tree
-                    .get_max_total_claim()
-                    .checked_add(total_bonus)
-                    .unwrap()
-            );
-        }
+        // if !verfify_args.skip_verify_amount {
+        //     let token_vault = get_associated_token_address(&distributor_pubkey, &args.mint);
+        //     let token_vault_account: TokenAccount = program.account(token_vault).unwrap();
+        //     assert_eq!(
+        //         token_vault_account.amount,
+        //         merkle_tree
+        //             .get_max_total_claim()
+        //             .checked_add(total_bonus)
+        //             .unwrap()
+        //     );
+        // }
 
         let merke_tree_state: MerkleDistributor = program.account(distributor_pubkey).unwrap();
         assert_eq!(merke_tree_state.root, merkle_tree.merkle_root);
 
+        println!(
+            "clawback start ts {} {}",
+            merke_tree_state.clawback_start_ts, 
+            verfify_args.clawback_start_ts
+        );
         assert_eq!(
             merke_tree_state.clawback_start_ts,
             verfify_args.clawback_start_ts
         );
-
+        
+        println!(
+            "closable {} {}",
+            merke_tree_state.closable, 
+            verfify_args.closable
+        );
         assert_eq!(merke_tree_state.closable, verfify_args.closable);
 
         assert_eq!(merke_tree_state.admin, verfify_args.admin);

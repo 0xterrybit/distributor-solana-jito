@@ -1,5 +1,5 @@
 export type MerkleDistributor = {
-  "version": "0.0.2",
+  "version": "0.1.0",
   "name": "merkle_distributor",
   "instructions": [
     {
@@ -140,8 +140,12 @@ export type MerkleDistributor = {
           "type": "i64"
         },
         {
-          "name": "enableSlot",
+          "name": "activationPoint",
           "type": "u64"
+        },
+        {
+          "name": "activationType",
+          "type": "u8"
         },
         {
           "name": "closable",
@@ -287,8 +291,12 @@ export type MerkleDistributor = {
           "type": "i64"
         },
         {
-          "name": "enableSlot",
+          "name": "activationPoint",
           "type": "u64"
+        },
+        {
+          "name": "activationType",
+          "type": "u8"
         },
         {
           "name": "closable",
@@ -299,7 +307,7 @@ export type MerkleDistributor = {
           "type": "u64"
         },
         {
-          "name": "bonusVestingSlotDuration",
+          "name": "bonusVestingDuration",
           "type": "u64"
         }
       ]
@@ -387,7 +395,7 @@ export type MerkleDistributor = {
       "args": []
     },
     {
-      "name": "setEnableSlot",
+      "name": "setActivationPoint",
       "accounts": [
         {
           "name": "distributor",
@@ -411,7 +419,7 @@ export type MerkleDistributor = {
       ],
       "args": [
         {
-          "name": "enableSlot",
+          "name": "activationPoint",
           "type": "u64"
         }
       ]
@@ -889,9 +897,9 @@ export type MerkleDistributor = {
             "type": "bool"
           },
           {
-            "name": "enableSlot",
+            "name": "activationPoint",
             "docs": [
-              "this merkle tree is enable from this slot"
+              "this merkle tree is activated from this slot or timestamp"
             ],
             "type": "u64"
           },
@@ -912,6 +920,13 @@ export type MerkleDistributor = {
             }
           },
           {
+            "name": "activationType",
+            "docs": [
+              "activation type, 0 means slot, 1 means timestamp"
+            ],
+            "type": "u8"
+          },
+          {
             "name": "buffer0",
             "docs": [
               "Buffer 0"
@@ -919,7 +934,7 @@ export type MerkleDistributor = {
             "type": {
               "array": [
                 "u8",
-                8
+                7
               ]
             }
           },
@@ -965,7 +980,7 @@ export type MerkleDistributor = {
             "type": "u64"
           },
           {
-            "name": "vestingSlotDuration",
+            "name": "vestingDuration",
             "type": "u64"
           },
           {
@@ -974,6 +989,23 @@ export type MerkleDistributor = {
               "total bonus"
             ],
             "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ActivationType",
+      "docs": [
+        "Type of the activation"
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Slot"
+          },
+          {
+            "name": "Timestamp"
           }
         ]
       }
@@ -1116,12 +1148,17 @@ export type MerkleDistributor = {
       "code": 6020,
       "name": "CannotCloseClaimStatus",
       "msg": "Cannot close claim status"
+    },
+    {
+      "code": 6021,
+      "name": "InvalidActivationType",
+      "msg": "Invalid activation type"
     }
   ]
 };
 
 export const IDL: MerkleDistributor = {
-  "version": "0.0.2",
+  "version": "0.1.0",
   "name": "merkle_distributor",
   "instructions": [
     {
@@ -1262,8 +1299,12 @@ export const IDL: MerkleDistributor = {
           "type": "i64"
         },
         {
-          "name": "enableSlot",
+          "name": "activationPoint",
           "type": "u64"
+        },
+        {
+          "name": "activationType",
+          "type": "u8"
         },
         {
           "name": "closable",
@@ -1409,8 +1450,12 @@ export const IDL: MerkleDistributor = {
           "type": "i64"
         },
         {
-          "name": "enableSlot",
+          "name": "activationPoint",
           "type": "u64"
+        },
+        {
+          "name": "activationType",
+          "type": "u8"
         },
         {
           "name": "closable",
@@ -1421,7 +1466,7 @@ export const IDL: MerkleDistributor = {
           "type": "u64"
         },
         {
-          "name": "bonusVestingSlotDuration",
+          "name": "bonusVestingDuration",
           "type": "u64"
         }
       ]
@@ -1509,7 +1554,7 @@ export const IDL: MerkleDistributor = {
       "args": []
     },
     {
-      "name": "setEnableSlot",
+      "name": "setActivationPoint",
       "accounts": [
         {
           "name": "distributor",
@@ -1533,7 +1578,7 @@ export const IDL: MerkleDistributor = {
       ],
       "args": [
         {
-          "name": "enableSlot",
+          "name": "activationPoint",
           "type": "u64"
         }
       ]
@@ -2011,9 +2056,9 @@ export const IDL: MerkleDistributor = {
             "type": "bool"
           },
           {
-            "name": "enableSlot",
+            "name": "activationPoint",
             "docs": [
-              "this merkle tree is enable from this slot"
+              "this merkle tree is activated from this slot or timestamp"
             ],
             "type": "u64"
           },
@@ -2034,6 +2079,13 @@ export const IDL: MerkleDistributor = {
             }
           },
           {
+            "name": "activationType",
+            "docs": [
+              "activation type, 0 means slot, 1 means timestamp"
+            ],
+            "type": "u8"
+          },
+          {
             "name": "buffer0",
             "docs": [
               "Buffer 0"
@@ -2041,7 +2093,7 @@ export const IDL: MerkleDistributor = {
             "type": {
               "array": [
                 "u8",
-                8
+                7
               ]
             }
           },
@@ -2087,7 +2139,7 @@ export const IDL: MerkleDistributor = {
             "type": "u64"
           },
           {
-            "name": "vestingSlotDuration",
+            "name": "vestingDuration",
             "type": "u64"
           },
           {
@@ -2096,6 +2148,23 @@ export const IDL: MerkleDistributor = {
               "total bonus"
             ],
             "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ActivationType",
+      "docs": [
+        "Type of the activation"
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Slot"
+          },
+          {
+            "name": "Timestamp"
           }
         ]
       }
@@ -2238,6 +2307,11 @@ export const IDL: MerkleDistributor = {
       "code": 6020,
       "name": "CannotCloseClaimStatus",
       "msg": "Cannot close claim status"
+    },
+    {
+      "code": 6021,
+      "name": "InvalidActivationType",
+      "msg": "Invalid activation type"
     }
   ]
 };

@@ -118,8 +118,7 @@ pub fn handle_new_claim(
     let node = hashv(&[LEAF_PREFIX, &node.to_bytes()]);
 
     require!(
-        verify(proof, distributor.root, node.to_bytes()),
-        ErrorCode::InvalidProof
+        verify(proof, distributor.root, node.to_bytes()), ErrorCode::InvalidProof
     );
 
     let claim_status = &mut ctx.accounts.claim_status;

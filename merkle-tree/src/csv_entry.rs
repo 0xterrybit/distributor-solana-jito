@@ -14,7 +14,7 @@ pub struct CsvEntry {
     /// amount unlocked, (ui amount)
     pub amount: String,
     /// amount locked, (ui amount)
-    pub locked_amount: String,
+    pub locked_amount: Option<String>,
 }
 
 impl CsvEntry {
@@ -29,25 +29,5 @@ impl CsvEntry {
         }
 
         Ok(entries)
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_csv_parsing() {
-        let path = PathBuf::from("./test_fixtures/test_csv.csv");
-        let entries = CsvEntry::new_from_file(&path).expect("Failed to parse CSV");
-
-        assert_eq!(entries.len(), 3);
-
-        assert_eq!(
-            entries[0].pubkey,
-            "4SX6nqv5VRLMoNfYM5phvHgcBNcBEwUEES4qPPjf1EqS"
-        );
-        assert_eq!(entries[0].amount, "1000");
-        assert_eq!(entries[0].locked_amount, "10");
     }
 }

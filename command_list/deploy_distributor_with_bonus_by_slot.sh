@@ -32,7 +32,7 @@ bonus_multiplier="[Bonus multiplier]"
 ## caculated variable, can ignore this
 # kv_path="[path to kv proofs]"
 priority_fee=1000000 # priority fee, can use other number
-max_nodes_per_tree=12000 # default value, can ignore the field
+max_nodes_per_tree=10000 # default value, can ignore the field
 base_key=$(solana-keygen pubkey $base_path)
 end_vesting_ts=$((clawback_start_ts - 86400)) # we dont care for end_vesting_ts and start_vesting ts
 start_vesting_ts=$((end_vesting_ts - 1))

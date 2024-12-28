@@ -22,7 +22,7 @@ pub type Result<T> = std::result::Result<T, ApiError>;
 #[clap(author, version, about, long_about = None)]
 pub struct Args {
     /// Bind address for the server
-    #[clap(long, env, default_value_t = SocketAddr::from_str("0.0.0.0:7001").unwrap())]
+    #[clap(long, env, default_value_t = SocketAddr::from_str("0.0.0.0:8080").unwrap())]
     bind_addr: SocketAddr,
 
     /// Path of merkle tree
@@ -57,6 +57,7 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
         .unwrap()
         .map(|r| r.unwrap())
         .collect();
+    
     paths.sort_by_key(|dir| dir.path());
 
     let mut tree = HashMap::new();
@@ -83,7 +84,7 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
             .unwrap();
         distributors.push(SingleDistributor {
             distributor_pubkey: distributor_pubkey.to_string(),
-            // merkle_root: single_tree.merkle_root.clone(),
+            merkle_root: single_tree.merkle_root.clone(),
             airdrop_version: single_tree.airdrop_version,
             max_num_nodes: single_tree.max_num_nodes,
             max_total_claim: single_tree.get_max_total_claim(),

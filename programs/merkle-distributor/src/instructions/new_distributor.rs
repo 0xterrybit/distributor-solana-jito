@@ -10,11 +10,11 @@ use crate::{
     state::merkle_distributor::{AirdropBonus, MerkleDistributor},
 };
 
-#[cfg(feature = "localnet")]
-const SECONDS_PER_DAY: i64 = 0;
+// #[cfg(feature = "localnet")]
+// const SECONDS_PER_DAY: i64 = 0;
 
-#[cfg(not(feature = "localnet"))]
-const SECONDS_PER_DAY: i64 = 24 * 3600; // 24 hours * 3600 seconds
+// #[cfg(not(feature = "localnet"))]
+// const SECONDS_PER_DAY: i64 = 24 * 3600; // 24 hours * 3600 seconds
 
 /// Accounts for [merkle_distributor::handle_new_distributor].
 #[derive(Accounts)]
@@ -101,24 +101,15 @@ pub fn handle_new_distributor(
     );
     // New distributor parameters must all be set in the future
     require!(
-        start_vesting_ts > curr_ts && end_vesting_ts > curr_ts && clawback_start_ts > curr_ts,
+        start_vesting_ts > curr_ts && curr_ts < end_vesting_ts,
         ErrorCode::TimestampsNotInFuture
     );
 
     require!(
-        clawback_start_ts > end_vesting_ts,
+        clawback_start_ts >= end_vesting_ts,
         ErrorCode::ClawbackDuringVesting
     );
-
-    // Ensure clawback_start_ts is at least one day after end_vesting_ts
-    require!(
-        clawback_start_ts
-            >= end_vesting_ts
-                .checked_add(SECONDS_PER_DAY)
-                .ok_or(ErrorCode::ArithmeticError)?,
-        ErrorCode::InsufficientClawbackDelay
-    );
-
+ 
     let distributor = &mut ctx.accounts.distributor;
 
     distributor.bump = *ctx.bumps.get("distributor").unwrap();

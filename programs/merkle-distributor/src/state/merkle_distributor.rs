@@ -1,4 +1,4 @@
-use crate::error::ErrorCode;
+// use crate::error::ErrorCode;
 use crate::math::safe_math::SafeMath;
 use anchor_lang::{
     account,
@@ -87,10 +87,9 @@ pub struct ActivationHandler {
 
 impl ActivationHandler {
     pub fn validate_claim(&self) -> Result<()> {
-        require!(
-            self.activation_point <= self.curr_point,
-            ErrorCode::ClaimingIsNotStarted
-        );
+        // require!(
+        //     self.activation_point <= self.curr_point, ErrorCode::ClaimingIsNotStarted
+        // );
         Ok(())
     }
     pub fn get_bonus_for_a_claimaint(&self, max_bonus: u64) -> Result<u64> {

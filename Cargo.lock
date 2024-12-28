@@ -2266,37 +2266,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "jupiter-airdrop-api"
-version = "0.0.1"
-dependencies = [
- "anchor-lang",
- "assert_matches",
- "axum",
- "clap 3.2.25",
- "futures",
- "http",
- "hyper",
- "hyper-tls",
- "jito-merkle-tree",
- "merkle-distributor",
- "serde",
- "serde_derive",
- "serde_json",
- "solana-program",
- "solana-rpc-client",
- "solana-rpc-client-api",
- "solana-sdk",
- "spl-associated-token-account 2.2.0",
- "thiserror",
- "tokio",
- "tower",
- "tower-http",
- "tracing",
- "tracing-core",
- "tracing-subscriber",
-]
-
-[[package]]
 name = "keccak"
 version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3756,6 +3725,37 @@ dependencies = [
  "proc-macro2 1.0.70",
  "quote 1.0.33",
  "syn 2.0.39",
+]
+
+[[package]]
+name = "server"
+version = "0.0.1"
+dependencies = [
+ "anchor-lang",
+ "assert_matches",
+ "axum",
+ "clap 3.2.25",
+ "futures",
+ "http",
+ "hyper",
+ "hyper-tls",
+ "jito-merkle-tree",
+ "merkle-distributor",
+ "serde",
+ "serde_derive",
+ "serde_json",
+ "solana-program",
+ "solana-rpc-client",
+ "solana-rpc-client-api",
+ "solana-sdk",
+ "spl-associated-token-account 2.2.0",
+ "thiserror",
+ "tokio",
+ "tower",
+ "tower-http",
+ "tracing",
+ "tracing-core",
+ "tracing-subscriber",
 ]
 
 [[package]]

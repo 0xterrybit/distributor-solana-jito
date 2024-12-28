@@ -93,7 +93,7 @@ pub enum Commands {
     /// Create a new instance of a merkle distributor
     NewDistributor(NewDistributorArgs),
     /// Create a new instance of a merkle distributor
-    NewDistributorWithBonus(NewDistributorWithBonusArgs),
+    // NewDistributorWithBonus(NewDistributorWithBonusArgs),
 
     CloseDistributor(CloseDistributorArgs),
     CloseClaimStatus(CloseClaimStatusArgs),
@@ -154,7 +154,7 @@ pub struct ClaimArgs {
 #[derive(Parser, Debug)]
 pub struct ClaimFromApiArgs {
     /// Merkle distributor path
-    #[clap(long, env, default_value = "https://worker.jup.ag/jup-claim-proof")]
+    #[clap(long, env, default_value = "http://localhost:8080")]
     root_api: String,
     #[clap(long, env)]
     destination_owner: Pubkey,
@@ -247,72 +247,72 @@ pub struct NewDistributorArgs {
     pub clawback_receiver_owner: Pubkey,
 }
 
-// NewDistributor subcommand args
-#[derive(Parser, Debug)]
-pub struct NewDistributorWithBonusArgs {
-    /// Lockup timestamp start
-    #[clap(long, env)]
-    pub start_vesting_ts: i64,
+// // NewDistributor subcommand args
+// #[derive(Parser, Debug)]
+// pub struct NewDistributorWithBonusArgs {
+//     /// Lockup timestamp start
+//     #[clap(long, env)]
+//     pub start_vesting_ts: i64,
 
-    /// Lockup timestamp end (unix timestamp)
-    #[clap(long, env)]
-    pub end_vesting_ts: i64,
+//     /// Lockup timestamp end (unix timestamp)
+//     #[clap(long, env)]
+//     pub end_vesting_ts: i64,
 
-    /// Merkle distributor path
-    #[clap(long, env)]
-    pub merkle_tree_path: PathBuf,
+//     /// Merkle distributor path
+//     #[clap(long, env)]
+//     pub merkle_tree_path: PathBuf,
 
-    /// When to make the clawback period start. Must be at least a day after the end_vesting_ts
-    #[clap(long, env)]
-    pub clawback_start_ts: i64,
+//     /// When to make the clawback period start. Must be at least a day after the end_vesting_ts
+//     #[clap(long, env)]
+//     pub clawback_start_ts: i64,
 
-    #[clap(long, env)]
-    pub activation_point: u64,
+//     #[clap(long, env)]
+//     pub activation_point: u64,
 
-    #[clap(long, env)]
-    pub activation_type: u8,
+//     #[clap(long, env)]
+//     pub activation_type: u8,
 
-    #[clap(long, env)]
-    pub airdrop_version: Option<u64>,
+//     #[clap(long, env)]
+//     pub airdrop_version: Option<u64>,
 
-    #[clap(long, env)]
-    pub closable: bool,
+//     #[clap(long, env)]
+//     pub closable: bool,
 
-    #[clap(long, env)]
-    pub skip_verify: bool,
+//     #[clap(long, env)]
+//     pub skip_verify: bool,
 
-    /// Base keypair
-    #[clap(long, env)]
-    pub base_path: String,
+//     /// Base keypair
+//     #[clap(long, env)]
+//     pub base_path: String,
 
-    /// Clawback receiver owner
-    #[clap(long, env)]
-    pub clawback_receiver_owner: Pubkey,
+//     /// Clawback receiver owner
+//     #[clap(long, env)]
+//     pub clawback_receiver_owner: Pubkey,
 
-    #[clap(long, env)]
-    pub bonus_vesting_duration: u64,
+//     #[clap(long, env)]
+//     pub bonus_vesting_duration: u64,
 
-    #[clap(long, env)]
-    pub bonus_multiplier: u64,
-}
+//     #[clap(long, env)]
+//     pub bonus_multiplier: u64,
+// }
 
-impl NewDistributorWithBonusArgs {
-    pub fn to_new_distributor_args(&self) -> NewDistributorArgs {
-        NewDistributorArgs {
-            start_vesting_ts: self.start_vesting_ts,
-            end_vesting_ts: self.end_vesting_ts,
-            merkle_tree_path: self.merkle_tree_path.clone(),
-            clawback_start_ts: self.clawback_start_ts,
-            activation_point: self.activation_point,
-            activation_type: self.activation_type,
-            airdrop_version: self.airdrop_version,
-            closable: self.closable,
-            skip_verify: self.skip_verify,
-            base_path: self.base_path.clone(),
-            clawback_receiver_owner: self.clawback_receiver_owner,
-        }
-    }
-}
+// impl NewDistributorWithBonusArgs {
+//     pub fn to_new_distributor_args(&self) -> NewDistributorArgs {
+//         NewDistributorArgs {
+//             start_vesting_ts: self.start_vesting_ts,
+//             end_vesting_ts: self.end_vesting_ts,
+//             merkle_tree_path: self.merkle_tree_path.clone(),
+//             clawback_start_ts: self.clawback_start_ts,
+//             activation_point: self.activation_point,
+//             activation_type: self.activation_type,
+//             airdrop_version: self.airdrop_version,
+//             closable: self.closable,
+//             skip_verify: self.skip_verify,
+//             base_path: self.base_path.clone(),
+//             clawback_receiver_owner: self.clawback_receiver_owner,
+//         }
+//     }
+// }
 
 #[derive(Parser, Debug)]
 pub struct ClawbackArgs {
@@ -548,9 +548,9 @@ fn main() {
         Commands::NewDistributor(new_distributor_args) => {
             process_new_distributor(&args, new_distributor_args);
         }
-        Commands::NewDistributorWithBonus(new_distributor_with_bonus_args) => {
-            process_new_distributor_with_bonus(&args, new_distributor_with_bonus_args);
-        }
+        // Commands::NewDistributorWithBonus(new_distributor_with_bonus_args) => {
+        //     process_new_distributor_with_bonus(&args, new_distributor_with_bonus_args);
+        // }
         Commands::CloseDistributor(close_distributor_args) => {
             process_close_distributor(&args, close_distributor_args);
         }
@@ -624,7 +624,7 @@ fn main() {
 }
 
 fn check_distributor_onchain_matches(
-    account: &Account,
+    distributor_account: &Account,
     merkle_tree: &AirdropMerkleTree,
     new_distributor_args: &NewDistributorArgs,
     total_bonus: u64,
@@ -633,7 +633,7 @@ fn check_distributor_onchain_matches(
     base: Pubkey,
     args: &Args,
 ) -> Result<(), &'static str> {
-    if let Ok(distributor) = MerkleDistributor::try_deserialize(&mut account.data.as_slice()) {
+    if let Ok(distributor) = MerkleDistributor::try_deserialize(&mut distributor_account.data.as_slice()) {
         if distributor.root != merkle_tree.merkle_root {
             return Err("root mismatch");
         }
@@ -642,14 +642,10 @@ fn check_distributor_onchain_matches(
             return Err("base mismatch");
         }
 
-        if distributor.max_total_claim
-            != merkle_tree
-                .get_max_total_claim()
-                .checked_add(total_bonus)
-                .unwrap()
-        {
+        if distributor.max_total_claim != merkle_tree.get_max_total_claim().checked_add(total_bonus).unwrap() {
             return Err("max_total_claim mismatch");
         }
+
         if distributor.max_num_nodes != merkle_tree.max_num_nodes {
             return Err("max_num_nodes mismatch");
         }
