@@ -74,8 +74,7 @@ pub fn handle_claim_locked(ctx: Context<ClaimLocked>) -> Result<()> {
     let activation_handler = distributor.get_activation_handler()?;
     activation_handler.validate_claim()?;
 
-    let amount =
-        claim_status.amount_withdrawable(curr_ts, distributor.start_ts, distributor.end_ts)?;
+    let amount = claim_status.amount_withdrawable(curr_ts, distributor.start_ts, distributor.end_ts)?;
 
     require!(amount > 0, ErrorCode::InsufficientUnlockedTokens);
 

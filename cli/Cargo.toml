@@ -1,5 +1,5 @@
 [package]
-name = "jup-scripts"
+name = "distributor-cli"
 version = { workspace = true }
 edition = { workspace = true }
 

@@ -4,22 +4,14 @@ use jito_merkle_tree::airdrop_merkle_tree::UserProof;
 use crate::*;
 
 pub fn process_claim_from_api(args: &Args, claim_args: &ClaimFromApiArgs) {
-    let keypair = read_keypair_file(&args.keypair_path.clone().unwrap())
-        .expect("Failed reading keypair file");
+
+    let keypair = read_keypair_file(&args.keypair_path.clone().unwrap()).expect("Failed reading keypair file");
     let claimant = keypair.pubkey();
 
-    let url = format!(
-        "{}/user/{}",
-        claim_args.root_api,
-        claimant.to_string()
-    );
+    let url = format!("{}/user/{}", claim_args.root_api, claimant.to_string());
     println!("url {}", url);
 
-    let user_proof: UserProof = reqwest::blocking::get(format!(
-        "{}/user/{}",
-        claim_args.root_api,
-        claim_args.destination_owner.to_string()
-    ))
+    let user_proof: UserProof = reqwest::blocking::get(url)
     .unwrap()
     .json()
     .unwrap();

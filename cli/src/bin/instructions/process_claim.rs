@@ -53,7 +53,7 @@ pub fn process_claim(args: &Args, claim_args: &ClaimArgs) {
             claim_status: claim_status_pda,
             from: get_associated_token_address(&distributor, &args.mint),
             to: claimant_ata,
-            claimant,
+            claimant: claimant,
             token_program: token::ID,
         }
         .to_account_metas(None),
@@ -61,8 +61,7 @@ pub fn process_claim(args: &Args, claim_args: &ClaimArgs) {
     });
 
     let blockhash = client.get_latest_blockhash().unwrap();
-    let tx =
-        Transaction::new_signed_with_payer(&ixs, Some(&claimant.key()), &[&keypair], blockhash);
+    let tx = Transaction::new_signed_with_payer(&ixs, Some(&claimant.key()), &[&keypair], blockhash);
 
     let signature = client
         .send_and_confirm_transaction_with_spinner(&tx)
