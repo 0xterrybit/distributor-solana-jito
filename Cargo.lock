@@ -1460,6 +1460,31 @@ dependencies = [
 ]
 
 [[package]]
+name = "distributor-cli"
+version = "0.0.1"
+dependencies = [
+ "anchor-client",
+ "anchor-lang",
+ "anchor-spl",
+ "anyhow",
+ "bincode",
+ "clap 3.2.25",
+ "csv",
+ "jito-merkle-tree",
+ "merkle-distributor",
+ "rand 0.7.3",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "solana-program",
+ "solana-rpc-client",
+ "solana-sdk",
+ "spl-associated-token-account 2.2.0",
+ "spl-token 3.5.0",
+ "zip",
+]
+
+[[package]]
 name = "dlopen"
 version = "0.1.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2238,31 +2263,6 @@ dependencies = [
  "serde",
  "serde_derive",
  "serde_json",
-]
-
-[[package]]
-name = "distributor-cli"
-version = "0.0.1"
-dependencies = [
- "anchor-client",
- "anchor-lang",
- "anchor-spl",
- "anyhow",
- "bincode",
- "clap 3.2.25",
- "csv",
- "jito-merkle-tree",
- "merkle-distributor",
- "rand 0.7.3",
- "reqwest",
- "serde",
- "serde_json",
- "solana-program",
- "solana-rpc-client",
- "solana-sdk",
- "spl-associated-token-account 2.2.0",
- "spl-token 3.5.0",
- "zip",
 ]
 
 [[package]]
