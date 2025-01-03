@@ -104,9 +104,10 @@ impl ActivationHandler {
                 let duration_into_unlock = curr_point.safe_sub(start_point)?;
                 let total_unlock_duration = self.airdrop_bonus.vesting_duration;
 
-                let amount = ((duration_into_unlock as u128).safe_mul(max_bonus as u128)?)
+                let bonus = ((duration_into_unlock as u128).safe_mul(max_bonus as u128)?)
                     .safe_div(total_unlock_duration as u128)? as u64;
-                Ok(amount)
+
+                Ok(bonus)
             }
         } else {
             Ok(0)
@@ -128,19 +129,19 @@ impl MerkleDistributor {
         })
     }
     pub fn accumulate_bonus(&mut self, bonus: u64) -> Result<()> {
-        self.airdrop_bonus.total_claimed_bonus =
-            self.airdrop_bonus.total_claimed_bonus.safe_add(bonus)?;
+        self.airdrop_bonus.total_claimed_bonus = self.airdrop_bonus.total_claimed_bonus.safe_add(bonus)?;
         Ok(())
     }
+    
     fn get_max_bonus_for_a_claimant(&self, unlocked_amount: u64) -> Result<u64> {
-        let max_total_claim_without_bonus =
-            self.max_total_claim
-                .safe_sub(self.airdrop_bonus.total_bonus)? as u128;
+        
+        let max_total_claim_without_bonus = self.max_total_claim.safe_sub(self.airdrop_bonus.total_bonus)? as u128;
 
-        let amount = (unlocked_amount as u128)
+        let max_bonus = (unlocked_amount as u128)
             .safe_mul(self.airdrop_bonus.total_bonus as u128)?
             .safe_div(max_total_claim_without_bonus)? as u64;
-        Ok(amount)
+
+        Ok(max_bonus)
     }
     pub fn get_bonus_for_a_claimaint(
         &self,

@@ -66,5 +66,6 @@ pub fn process_claim(args: &Args, claim_args: &ClaimArgs) {
     let signature = client
         .send_and_confirm_transaction_with_spinner(&tx)
         .unwrap();
+    
     println!("successfully claimed tokens with signature {signature:#?}",);
 }

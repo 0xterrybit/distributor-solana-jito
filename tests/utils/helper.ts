@@ -4,9 +4,38 @@ import { ASSOCIATED_TOKEN_PROGRAM_ID, Token, TOKEN_PROGRAM_ID } from '@solana/sp
 
 export function deriveClaimStatus(claimant: web3.PublicKey, distributor: web3.PublicKey, programId: web3.PublicKey) {
   return web3.PublicKey.findProgramAddressSync(
-    [Buffer.from('ClaimStatus'), claimant.toBytes(), distributor.toBytes()],
+    [
+      Buffer.from('ClaimStatus'), 
+      claimant.toBytes(), 
+      distributor.toBytes()
+    ],
     programId,
   );
+}
+
+
+export const getMerkleDistributorPDA = (
+  programId: PublicKey,
+  base: PublicKey,
+  mint: PublicKey,
+  airdropVersion: number,
+): [PublicKey, number] => {
+  // 创建 buffer 来存储 airdropVersion
+  const versionBuffer = Buffer.alloc(8);
+  versionBuffer.writeBigUInt64LE(BigInt(airdropVersion));
+
+  // 查找 PDA
+  const [distributorPubkey, bump] = PublicKey.findProgramAddressSync(
+    [
+      Buffer.from('MerkleDistributor'),  // 种子前缀
+      base.toBuffer(),                   // base pubkey
+      mint.toBuffer(),                   // mint pubkey
+      versionBuffer,                     // airdrop version
+    ],
+    programId
+  );
+
+  return [distributorPubkey, bump];
 }
 
 export const getOrCreateATAInstruction = async (

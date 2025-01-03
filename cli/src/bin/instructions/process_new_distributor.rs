@@ -21,8 +21,8 @@ pub fn process_new_distributor(args: &Args, new_distributor_args: &NewDistributo
                 );
                 thread::sleep(Duration::from_secs(5));
                 if i == 1 {
-                    create_new_distributor(args, new_distributor_args, 0, 0)
-                        .expect("Failed to create distributors");
+                    let _ = create_new_distributor(args, new_distributor_args, 0, 0);
+                        // .expect("Failed to create distributors");
                 }
             }
         }
@@ -99,10 +99,10 @@ fn create_new_distributor(
 
         let merkle_tree = AirdropMerkleTree::new_from_file(&single_tree_path).unwrap();
 
-        let total_bonus = merkle_tree
-            .total_unlocked_amount
-            .checked_mul(bonus_multiplier)
-            .unwrap();
+        // let total_bonus = merkle_tree
+        //     .total_unlocked_amount
+        //     .checked_mul(bonus_multiplier)
+        //     .unwrap();
 
         if new_distributor_args.airdrop_version.is_some() {
             let airdrop_version = new_distributor_args.airdrop_version.unwrap();
@@ -120,23 +120,23 @@ fn create_new_distributor(
             "distributor_pubkey {:?} ", distributor_pubkey
         );
         
-        if let Some(distributor_account) = client.get_account_with_commitment(&distributor_pubkey, CommitmentConfig::confirmed())?.value
-            {
-                println!(
-                    "merkle distributor {} account exists, checking parameters...", merkle_tree.airdrop_version
-                );
-                check_distributor_onchain_matches(
-                    &distributor_account,
-                    &merkle_tree,
-                    new_distributor_args,
-                    total_bonus,
-                    bonus_vesting_duration,
-                    keypair.pubkey(),
-                    base.pubkey(),
-                    &args,
-                ).expect("merkle root on-chain does not match provided arguments! Confirm admin and clawback parameters to avoid loss of funds!");
-                continue;
-            }
+        // if let Some(distributor_account) = client.get_account_with_commitment(&distributor_pubkey, CommitmentConfig::confirmed())?.value
+        //     {
+        //         println!(
+        //             "merkle distributor {} account exists, checking parameters...", merkle_tree.airdrop_version
+        //         );
+        //         check_distributor_onchain_matches(
+        //             &distributor_account,
+        //             &merkle_tree,
+        //             new_distributor_args,
+        //             total_bonus,
+        //             bonus_vesting_duration,
+        //             keypair.pubkey(),
+        //             base.pubkey(),
+        //             &args,
+        //         ).expect("merkle root on-chain does not match provided arguments! Confirm admin and clawback parameters to avoid loss of funds!");
+        //         continue;
+        //     }
 
         let mut ixs = vec![];
 
@@ -177,67 +177,67 @@ fn create_new_distributor(
             );
         }
 
-        if total_bonus == 0 {
-            ixs.push(Instruction {
-                program_id: args.program_id,
-                accounts: merkle_distributor::accounts::NewDistributor {
-                    base: base.pubkey(),
-                    clawback_receiver,
-                    mint: args.mint,
-                    token_vault,
-                    distributor: distributor_pubkey,
-                    system_program: solana_program::system_program::id(),
-                    associated_token_program: spl_associated_token_account::ID,
-                    token_program: token::ID,
-                    admin: keypair.pubkey(),
-                }
-                .to_account_metas(None),
-                data: merkle_distributor::instruction::NewDistributor {
-                    version: merkle_tree.airdrop_version,
-                    root: merkle_tree.merkle_root,
-                    max_total_claim: merkle_tree.get_max_total_claim(),
-                    max_num_nodes: merkle_tree.max_num_nodes,
-                    start_vesting_ts: new_distributor_args.start_vesting_ts,
-                    end_vesting_ts: new_distributor_args.end_vesting_ts,
-                    clawback_start_ts: new_distributor_args.clawback_start_ts,
-                    activation_point: new_distributor_args.activation_point,
-                    activation_type: new_distributor_args.activation_type,
-                    closable: new_distributor_args.closable,
-                }
-                .data(),
-            });
-        } else {
-            ixs.push(Instruction {
-                program_id: args.program_id,
-                accounts: merkle_distributor::accounts::NewDistributor {
-                    base: base.pubkey(),
-                    clawback_receiver,
-                    mint: args.mint,
-                    token_vault,
-                    distributor: distributor_pubkey,
-                    system_program: solana_program::system_program::id(),
-                    associated_token_program: spl_associated_token_account::ID,
-                    token_program: token::ID,
-                    admin: keypair.pubkey(),
-                }
-                .to_account_metas(None),
-                data: merkle_distributor::instruction::NewDistributor2 {
-                    version: merkle_tree.airdrop_version,
-                    root: merkle_tree.merkle_root,
-                    total_claim: merkle_tree.get_max_total_claim(),
-                    max_num_nodes: merkle_tree.max_num_nodes,
-                    start_vesting_ts: new_distributor_args.start_vesting_ts,
-                    end_vesting_ts: new_distributor_args.end_vesting_ts,
-                    clawback_start_ts: new_distributor_args.clawback_start_ts,
-                    activation_point: new_distributor_args.activation_point,
-                    activation_type: new_distributor_args.activation_type,
-                    closable: new_distributor_args.closable,
-                    total_bonus,
-                    bonus_vesting_duration,
-                }
-                .data(),
-            });
-        }
+        // if total_bonus == 0 {
+        //     // ixs.push(Instruction {
+        //     //     program_id: args.program_id,
+        //     //     accounts: merkle_distributor::accounts::NewDistributor {
+        //     //         base: base.pubkey(),
+        //     //         clawback_receiver,
+        //     //         mint: args.mint,
+        //     //         token_vault,
+        //     //         distributor: distributor_pubkey,
+        //     //         system_program: solana_program::system_program::id(),
+        //     //         associated_token_program: spl_associated_token_account::ID,
+        //     //         token_program: token::ID,
+        //     //         admin: keypair.pubkey(),
+        //     //     }
+        //     //     .to_account_metas(None),
+        //     //     data: merkle_distributor::instruction::NewDistributor {
+        //     //         version: merkle_tree.airdrop_version,
+        //     //         root: merkle_tree.merkle_root,
+        //     //         max_total_claim: merkle_tree.get_max_total_claim(),
+        //     //         max_num_nodes: merkle_tree.max_num_nodes,
+        //     //         start_vesting_ts: new_distributor_args.start_vesting_ts,
+        //     //         end_vesting_ts: new_distributor_args.end_vesting_ts,
+        //     //         clawback_start_ts: new_distributor_args.clawback_start_ts,
+        //     //         activation_point: new_distributor_args.activation_point,
+        //     //         activation_type: new_distributor_args.activation_type,
+        //     //         closable: new_distributor_args.closable,
+        //     //     }
+        //     //     .data(),
+        //     // });
+        // } else {
+        //     // ixs.push(Instruction {
+        //     //     program_id: args.program_id,
+        //     //     accounts: merkle_distributor::accounts::NewDistributor {
+        //     //         base: base.pubkey(),
+        //     //         clawback_receiver,
+        //     //         mint: args.mint,
+        //     //         token_vault,
+        //     //         distributor: distributor_pubkey,
+        //     //         system_program: solana_program::system_program::id(),
+        //     //         associated_token_program: spl_associated_token_account::ID,
+        //     //         token_program: token::ID,
+        //     //         admin: keypair.pubkey(),
+        //     //     }
+        //     //     .to_account_metas(None),
+        //     //     data: merkle_distributor::instruction::NewDistributor2 {
+        //     //         version: merkle_tree.airdrop_version,
+        //     //         root: merkle_tree.merkle_root,
+        //     //         total_claim: merkle_tree.get_max_total_claim(),
+        //     //         max_num_nodes: merkle_tree.max_num_nodes,
+        //     //         start_vesting_ts: new_distributor_args.start_vesting_ts,
+        //     //         end_vesting_ts: new_distributor_args.end_vesting_ts,
+        //     //         clawback_start_ts: new_distributor_args.clawback_start_ts,
+        //     //         activation_point: new_distributor_args.activation_point,
+        //     //         activation_type: new_distributor_args.activation_type,
+        //     //         closable: new_distributor_args.closable,
+        //     //         total_bonus,
+        //     //         bonus_vesting_duration,
+        //     //     }
+        //     //     .data(),
+        //     // });
+        // }
 
         let blockhash = client.get_latest_blockhash().unwrap();
         let tx = Transaction::new_signed_with_payer(
@@ -251,49 +251,62 @@ fn create_new_distributor(
         // didn't get frontrun.
         // If this fails, make sure to run it again.
 
-        if new_distributor_args.skip_verify {
-            match client.send_transaction(&tx) {
-                Ok(_) => {
-                    println!(
-                        "done create merkle distributor version {} {:?}",
-                        merkle_tree.airdrop_version,
-                        tx.get_signature(),
-                    );
-                }
-                Err(e) => {
-                    is_error = true;
-                    println!("Failed to create MerkleDistributor: {:?}", e);
-                }
-            }
-        } else {
-            match client.send_and_confirm_transaction_with_spinner(&tx) {
-                Ok(_) => {
-                    println!(
-                        "done create merkle distributor version {} {:?}",
-                        merkle_tree.airdrop_version,
-                        tx.get_signature(),
-                    );
-                }
-                Err(e) => {
-                    is_error = true;
-                    println!("Failed to create MerkleDistributor: {:?}", e);
-                }
-            }
+        // if new_distributor_args.skip_verify {
+        //     match client.send_transaction(&tx) {
+        //         Ok(_) => {
+        //             println!(
+        //                 "done create merkle distributor version {} {:?}",
+        //                 merkle_tree.airdrop_version,
+        //                 tx.get_signature(),
+        //             );
+        //         }
+        //         Err(e) => {
+        //             is_error = true;
+        //             println!("Failed to create MerkleDistributor: {:?}", e);
+        //         }
+        //     }
+        // } else {
+        //     match client.send_and_confirm_transaction_with_spinner(&tx) {
+        //         Ok(_) => {
+        //             println!(
+        //                 "done create merkle distributor version {} {:?}",
+        //                 merkle_tree.airdrop_version,
+        //                 tx.get_signature(),
+        //             );
+        //         }
+        //         Err(e) => {
+        //             is_error = true;
+        //             println!("Failed to create MerkleDistributor: {:?}", e);
+        //         }
+        //     }
 
-            // double check someone didn't frontrun this transaction with a malicious merkle root
-            if let Some(account) = client.get_account_with_commitment(&distributor_pubkey, CommitmentConfig::processed())?.value
-                {
-                    check_distributor_onchain_matches(
-                    &account,
-                    &merkle_tree,
-                    new_distributor_args,
-                    total_bonus,
-                    bonus_vesting_duration,
-                    keypair.pubkey(),
-                    base.pubkey(),
-                    args,
-                ).expect("merkle root on-chain does not match provided arguments! Confirm admin and clawback parameters to avoid loss of funds!");
-                }
+        //     // double check someone didn't frontrun this transaction with a malicious merkle root
+        //     if let Some(account) = client.get_account_with_commitment(&distributor_pubkey, CommitmentConfig::processed())?.value
+        //         {
+        //             check_distributor_onchain_matches(
+        //             &account,
+        //             &merkle_tree,
+        //             new_distributor_args,
+        //             total_bonus,
+        //             bonus_vesting_duration,
+        //             keypair.pubkey(),
+        //             base.pubkey(),
+        //             args,
+        //         ).expect("merkle root on-chain does not match provided arguments! Confirm admin and clawback parameters to avoid loss of funds!");
+        //         }
+        // }
+        match client.send_transaction(&tx) {
+            Ok(_) => {
+                println!(
+                    "done create merkle distributor version {} {:?}",
+                    merkle_tree.airdrop_version,
+                    tx.get_signature(),
+                );
+            }
+            Err(e) => {
+                is_error = true;
+                println!("Failed to create MerkleDistributor: {:?}", e);
+            }
         }
 
         if new_distributor_args.airdrop_version.is_some() {
@@ -310,4 +323,48 @@ fn create_new_distributor(
         ));
     }
     Ok(())
+}
+
+
+// NewDistributor subcommand args
+#[derive(Parser, Debug)]
+pub struct NewDistributorArgs {
+    /// Lockup timestamp start
+    #[clap(long, env)]
+    pub start_vesting_ts: i64,
+
+    /// Lockup timestamp end (unix timestamp)
+    #[clap(long, env)]
+    pub end_vesting_ts: i64,
+
+    /// Merkle distributor path
+    #[clap(long, env)]
+    pub merkle_tree_path: PathBuf,
+
+    /// When to make the clawback period start. Must be at least a day after the end_vesting_ts
+    #[clap(long, env)]
+    pub clawback_start_ts: i64,
+
+    #[clap(long, env)]
+    pub activation_point: u64,
+
+    #[clap(long, env)]
+    pub activation_type: u8,
+
+    #[clap(long, env)]
+    pub airdrop_version: Option<u64>,
+
+    #[clap(long, env)]
+    pub closable: bool,
+
+    #[clap(long, env)]
+    pub skip_verify: bool,
+
+    /// Base keypair
+    #[clap(long, env)]
+    pub base_path: String,
+
+    /// Clawback receiver owner
+    #[clap(long, env)]
+    pub clawback_receiver_owner: Pubkey,
 }

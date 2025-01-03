@@ -114,3 +114,11 @@ fn fund_all(args: &Args, fund_all_args: &FundAllArgs) -> Result<()> {
     }
     Ok(())
 }
+
+
+#[derive(Parser, Debug)]
+pub struct FundAllArgs {
+    /// Merkle distributor path
+    #[clap(long, env)]
+    pub merkle_tree_path: PathBuf,
+}

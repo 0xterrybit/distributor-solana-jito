@@ -107,7 +107,7 @@ pub enum Commands {
     SetActivationPoint(SetActivationArgs),
     SetActivationSlotByTime(SetActivationSlotByTimeArgs),
 
-    CreateTestList(CreateTestListArgs),
+    // CreateTestList(CreateTestListArgs),
     CreateDummyCsv(CreateDummyCsv),
     ExtendList(ExtendListArgs),
 
@@ -160,12 +160,12 @@ pub struct ClaimFromApiArgs {
     destination_owner: Pubkey,
 }
 
-#[derive(Parser, Debug)]
-pub struct FundAllArgs {
-    /// Merkle distributor path
-    #[clap(long, env)]
-    pub merkle_tree_path: PathBuf,
-}
+// #[derive(Parser, Debug)]
+// pub struct FundAllArgs {
+//     /// Merkle distributor path
+//     #[clap(long, env)]
+//     pub merkle_tree_path: PathBuf,
+// }
 
 #[derive(Parser, Debug)]
 pub struct VerifyArgs {
@@ -204,48 +204,48 @@ pub struct VerifyArgs {
     pub bonus_multiplier: u64,
 }
 
-// NewDistributor subcommand args
-#[derive(Parser, Debug)]
-pub struct NewDistributorArgs {
-    /// Lockup timestamp start
-    #[clap(long, env)]
-    pub start_vesting_ts: i64,
+// // NewDistributor subcommand args
+// #[derive(Parser, Debug)]
+// pub struct NewDistributorArgs {
+//     /// Lockup timestamp start
+//     #[clap(long, env)]
+//     pub start_vesting_ts: i64,
 
-    /// Lockup timestamp end (unix timestamp)
-    #[clap(long, env)]
-    pub end_vesting_ts: i64,
+//     /// Lockup timestamp end (unix timestamp)
+//     #[clap(long, env)]
+//     pub end_vesting_ts: i64,
 
-    /// Merkle distributor path
-    #[clap(long, env)]
-    pub merkle_tree_path: PathBuf,
+//     /// Merkle distributor path
+//     #[clap(long, env)]
+//     pub merkle_tree_path: PathBuf,
 
-    /// When to make the clawback period start. Must be at least a day after the end_vesting_ts
-    #[clap(long, env)]
-    pub clawback_start_ts: i64,
+//     /// When to make the clawback period start. Must be at least a day after the end_vesting_ts
+//     #[clap(long, env)]
+//     pub clawback_start_ts: i64,
 
-    #[clap(long, env)]
-    pub activation_point: u64,
+//     #[clap(long, env)]
+//     pub activation_point: u64,
 
-    #[clap(long, env)]
-    pub activation_type: u8,
+//     #[clap(long, env)]
+//     pub activation_type: u8,
 
-    #[clap(long, env)]
-    pub airdrop_version: Option<u64>,
+//     #[clap(long, env)]
+//     pub airdrop_version: Option<u64>,
 
-    #[clap(long, env)]
-    pub closable: bool,
+//     #[clap(long, env)]
+//     pub closable: bool,
 
-    #[clap(long, env)]
-    pub skip_verify: bool,
+//     #[clap(long, env)]
+//     pub skip_verify: bool,
 
-    /// Base keypair
-    #[clap(long, env)]
-    pub base_path: String,
+//     /// Base keypair
+//     #[clap(long, env)]
+//     pub base_path: String,
 
-    /// Clawback receiver owner
-    #[clap(long, env)]
-    pub clawback_receiver_owner: Pubkey,
-}
+//     /// Clawback receiver owner
+//     #[clap(long, env)]
+//     pub clawback_receiver_owner: Pubkey,
+// }
 
 // // NewDistributor subcommand args
 // #[derive(Parser, Debug)]
@@ -322,28 +322,25 @@ pub struct ClawbackArgs {
     pub to_version: u64,
 }
 
-#[derive(Parser, Debug)]
-pub struct CreateMerkleTreeArgs {
-    /// CSV path
-    #[clap(long, env)]
-    pub csv_path: PathBuf,
+// #[derive(Parser, Debug)]
+// pub struct CreateMerkleTreeArgs {
+//     /// CSV path
+//     #[clap(long, env)]
+//     pub csv_path: PathBuf,
 
-    /// Merkle tree out path
-    #[clap(long, env)]
-    pub merkle_tree_path: PathBuf,
+//     /// Merkle tree out path
+//     #[clap(long, env)]
+//     pub merkle_tree_path: PathBuf,
 
-    /// max nodes per tree
-    #[clap(long, env)]
-    pub max_nodes_per_tree: u64,
+//     /// max nodes per tree
+//     #[clap(long, env)]
+//     pub max_nodes_per_tree: u64,
 
-    #[clap(long, env)]
-    pub should_include_test_list: bool,
-
-    #[clap(long, env)]
-    pub amount: u64,
-    #[clap(long, env)]
-    pub decimals: u32,
-}
+//     #[clap(long, env)]
+//     pub amount: u64,
+//     #[clap(long, env)]
+//     pub decimals: u32,
+// }
 
 #[derive(Parser, Debug)]
 pub struct SetAdminArgs {
@@ -382,22 +379,22 @@ pub struct SlotByTimeArgsArgs {
     pub timestamp: u64,
 }
 
-#[derive(Parser, Debug)]
-pub struct CreateTestListArgs {
-    /// CSV path
-    #[clap(long, env)]
-    pub csv_path: PathBuf,
+// #[derive(Parser, Debug)]
+// pub struct CreateTestListArgs {
+//     /// CSV path
+//     #[clap(long, env)]
+//     pub csv_path: PathBuf,
 
-    /// Merkle tree out path
-    #[clap(long, env)]
-    pub merkle_tree_path: PathBuf,
+//     /// Merkle tree out path
+//     #[clap(long, env)]
+//     pub merkle_tree_path: PathBuf,
 
-    #[clap(long, env)]
-    pub amount: u64,
+//     #[clap(long, env)]
+//     pub amount: u64,
 
-    #[clap(long, env)]
-    pub decimals: u32,
-}
+//     #[clap(long, env)]
+//     pub decimals: u32,
+// }
 
 #[derive(Parser, Debug)]
 pub struct CreateDummyCsv {
@@ -408,19 +405,6 @@ pub struct CreateDummyCsv {
     pub num_records: u64,
     #[clap(long, env)]
     pub amount: u64,
-}
-
-#[derive(Parser, Debug)]
-pub struct ExtendListArgs {
-    /// CSV path
-    #[clap(long, env)]
-    pub csv_path: PathBuf,
-    #[clap(long, env)]
-    pub num_records: u64,
-    #[clap(long, env)]
-    pub amount: u64,
-    #[clap(long, env)]
-    pub destination_path: String,
 }
 
 #[derive(Parser, Debug)]
@@ -576,9 +560,9 @@ fn main() {
         Commands::CreateDummyCsv(test_args) => {
             process_create_dummy_csv(test_args);
         }
-        Commands::CreateTestList(create_test_list_args) => {
-            process_create_test_list(&args, create_test_list_args);
-        }
+        // Commands::CreateTestList(create_test_list_args) => {
+        //     process_create_test_list(&args, create_test_list_args);
+        // }
         Commands::FundAll(fund_all_args) => {
             process_fund_all(&args, fund_all_args);
         }
@@ -623,114 +607,93 @@ fn main() {
     }
 }
 
-fn check_distributor_onchain_matches(
-    distributor_account: &Account,
-    merkle_tree: &AirdropMerkleTree,
-    new_distributor_args: &NewDistributorArgs,
-    total_bonus: u64,
-    bonus_vesting_duration: u64,
-    pubkey: Pubkey,
-    base: Pubkey,
-    args: &Args,
-) -> Result<(), &'static str> {
-    if let Ok(distributor) = MerkleDistributor::try_deserialize(&mut distributor_account.data.as_slice()) {
-        if distributor.root != merkle_tree.merkle_root {
-            return Err("root mismatch");
-        }
+// fn check_distributor_onchain_matches(
+//     distributor_account: &Account,
+//     merkle_tree: &AirdropMerkleTree,
+//     new_distributor_args: &NewDistributorArgs,
+//     total_bonus: u64,
+//     bonus_vesting_duration: u64,
+//     pubkey: Pubkey,
+//     base: Pubkey,
+//     args: &Args,
+// ) -> Result<(), &'static str> {
+//     if let Ok(distributor) = MerkleDistributor::try_deserialize(&mut distributor_account.data.as_slice()) {
+//         if distributor.root != merkle_tree.merkle_root {
+//             return Err("root mismatch");
+//         }
 
-        if distributor.base != base {
-            return Err("base mismatch");
-        }
+//         if distributor.base != base {
+//             return Err("base mismatch");
+//         }
 
-        if distributor.max_total_claim != merkle_tree.get_max_total_claim().checked_add(total_bonus).unwrap() {
-            return Err("max_total_claim mismatch");
-        }
+//         if distributor.max_total_claim != merkle_tree.get_max_total_claim().checked_add(total_bonus).unwrap() {
+//             return Err("max_total_claim mismatch");
+//         }
 
-        if distributor.max_num_nodes != merkle_tree.max_num_nodes {
-            return Err("max_num_nodes mismatch");
-        }
+//         if distributor.max_num_nodes != merkle_tree.max_num_nodes {
+//             return Err("max_num_nodes mismatch");
+//         }
 
-        if distributor.start_ts != new_distributor_args.start_vesting_ts {
-            return Err("start_ts mismatch");
-        }
-        if distributor.end_ts != new_distributor_args.end_vesting_ts {
-            return Err("end_ts mismatch");
-        }
-        if distributor.clawback_start_ts != new_distributor_args.clawback_start_ts {
-            return Err("clawback_start_ts mismatch");
-        }
+//         if distributor.start_ts != new_distributor_args.start_vesting_ts {
+//             return Err("start_ts mismatch");
+//         }
+//         if distributor.end_ts != new_distributor_args.end_vesting_ts {
+//             return Err("end_ts mismatch");
+//         }
+//         if distributor.clawback_start_ts != new_distributor_args.clawback_start_ts {
+//             return Err("clawback_start_ts mismatch");
+//         }
 
-        if distributor.activation_type != new_distributor_args.activation_type {
-            return Err("activation_type mismatch");
-        }
-        if distributor.activation_point != new_distributor_args.activation_point {
-            return Err("activation_slot mismatch");
-        }
+//         if distributor.activation_type != new_distributor_args.activation_type {
+//             return Err("activation_type mismatch");
+//         }
+//         if distributor.activation_point != new_distributor_args.activation_point {
+//             return Err("activation_slot mismatch");
+//         }
 
-        if distributor.closable != new_distributor_args.closable {
-            return Err("closable mismatch");
-        }
+//         if distributor.closable != new_distributor_args.closable {
+//             return Err("closable mismatch");
+//         }
 
-        if distributor.airdrop_bonus.total_bonus != total_bonus {
-            return Err("total_bonus mismatch");
-        }
+//         if distributor.airdrop_bonus.total_bonus != total_bonus {
+//             return Err("total_bonus mismatch");
+//         }
 
-        if distributor.airdrop_bonus.vesting_duration != bonus_vesting_duration {
-            return Err("bonus_vesting_duration mismatch");
-        }
+//         if distributor.airdrop_bonus.vesting_duration != bonus_vesting_duration {
+//             return Err("bonus_vesting_duration mismatch");
+//         }
 
-        // TODO fix code
-        let clawback_receiver_token_account =
-            spl_associated_token_account::get_associated_token_address(
-                &new_distributor_args.clawback_receiver_owner,
-                &args.mint,
-            );
+//         // TODO fix code
+//         let clawback_receiver_token_account =
+//             spl_associated_token_account::get_associated_token_address(
+//                 &new_distributor_args.clawback_receiver_owner,
+//                 &args.mint,
+//             );
 
-        if clawback_receiver_token_account != distributor.clawback_receiver {
-            return Err("clawback_receiver mismatch");
-        }
-        if distributor.admin != pubkey {
-            return Err("admin mismatch");
-        }
-    }
-    Ok(())
-}
+//         if clawback_receiver_token_account != distributor.clawback_receiver {
+//             return Err("clawback_receiver mismatch");
+//         }
+//         if distributor.admin != pubkey {
+//             return Err("admin mismatch");
+//         }
+//     }
+//     Ok(())
+// }
 
 fn get_pre_list() -> Vec<String> {
     let list = vec![
-        "DHLXnJdACTY83yKwnUkeoDjqi4QBbsYGa1v8tJL76ViX",
-        "BULRqL3U2jPgwvz6HYCyBVq9BMtK94Y1Nz98KQop23aD",
-        "7w32LzRsJrQiE7S3ZSdkz9TSFGey1XNsonPmdm9xDUch",
-        "55pPhcCcp8gEKvKWr1JUkAcdwMeemmNhTHmkWNR9sJib",
-        "62ucxc2gd5TBCwzToEEWVV4M5drVK7Fi7aYozniqWtac",
-        "5unTfT2kssBuNvHPY6LbJfJpLqEcdMxGYLWHwShaeTLi",
-        "9zg3seAh4Er1Nz8GAuiciH437apxtzgUWBT8frhudevR",
-        "AjefJWRfjRCVNSQ1pHnTW8F7szLV7xFZftiB3yM5vnTa",
-        "8SEFruHjgNrnV8ak2Ff11wg9em8Nh72RWTwk359bRyzE",
-        "7jBypy9HX1dyLHPnmRnRubibNUaBPrShnERGnoE7rc3C",
-        "XWpxVfYTeKmmp18DPxqPvWFL7P1C2vbdegDPAbXkV1n",
-        "AuTFdqo4GsxpDgtag87pDaHE259cE94Z82kdpFozVBhC",
-        "6h43GsVT3TjtLa5nRpsXp15GDpAY4smWCYHgcq58dSPM",
-        "2mAax9cNqDXDg9eDJDby1tBh9Q8N3TS7qLhX9rMp8EVc",
-        "JBeYA7dmBGCNgaEdtqdoUnESwKJho5YvgXVNLgo4n3MM",
-        "HeTpE5BnNinzNv92MzVAGyVT5LjAwTWuk5qQcPURmi2L",
-        "Bidku3jkJUxiTzBJZroEfwPcUWueNUst9LrMbZQLhrtG",
-        "HUQytvb7WCCqbHnpQrVgXhmXSw4XfWMnmqCiKz6T1vsU",
-        "4zvTjdpyr3SAgLeSpCnq4KaHvX2j5SbkwxYydzbfqhRQ",
-        "EVfUfs9XNwJmfNvoazDbZVb6ecnGCxgQrJzsCQHoQ4q7",
-        "GMtwcuktJfrRcnyGktWW4Vab8cfjPcBy3xbuZgRegw6E",
-        "HAPdsaZFfQDG4bD8vzBbPCUawUWKSJxvhQ7TGg1BeAxZ",
+        "8bsJcfGRyFWUEzS4bQfADTVBjReUm3YH89x1QY1qp3gd",
     ];
     let list: Vec<String> = list.iter().map(|x| x.to_string()).collect();
     list
 }
 
-fn get_test_list() -> Vec<String> {
-    let list = vec![
-        "62ucxc2gd5TBCwzToEEWVV4M5drVK7Fi7aYozniqWtac",
-        "HcrGezZ4vsveZ9vRX1vQU3WRiEzx8T4XcBBv9Hs9Smmd",
-        "DHLXnJdACTY83yKwnUkeoDjqi4QBbsYGa1v8tJL76ViX",
-    ];
-    let list: Vec<String> = list.iter().map(|x| x.to_string()).collect();
-    list
-}
+// fn get_test_list() -> Vec<String> {
+//     let list = vec![
+//         "62ucxc2gd5TBCwzToEEWVV4M5drVK7Fi7aYozniqWtac",
+//         "HcrGezZ4vsveZ9vRX1vQU3WRiEzx8T4XcBBv9Hs9Smmd",
+//         "DHLXnJdACTY83yKwnUkeoDjqi4QBbsYGa1v8tJL76ViX",
+//     ];
+//     let list: Vec<String> = list.iter().map(|x| x.to_string()).collect();
+//     list
+// }

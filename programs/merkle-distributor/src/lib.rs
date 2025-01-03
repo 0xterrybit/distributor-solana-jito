@@ -104,6 +104,7 @@ pub mod merkle_distributor {
             bonus_vesting_duration,
         )
     }
+    
     /// only available in test phase
     #[allow(clippy::result_large_err)]
     pub fn close_distributor(ctx: Context<CloseDistributor>) -> Result<()> {

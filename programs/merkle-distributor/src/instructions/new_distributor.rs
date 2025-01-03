@@ -90,25 +90,27 @@ pub fn handle_new_distributor(
     activation_point: u64,
     activation_type: u8,
     closable: bool,
-    total_bonus: u64,
-    bonus_vesting_duration: u64,
+
+    total_bonus: u64,               // 总奖励
+    bonus_vesting_duration: u64,    // 奖励持续时间
 ) -> Result<()> {
-    let curr_ts = Clock::get()?.unix_timestamp;
+    // let curr_ts = Clock::get()?.unix_timestamp;
 
-    require!(
-        start_vesting_ts < end_vesting_ts,
-        ErrorCode::StartTimestampAfterEnd
-    );
+    // require!(
+    //     start_vesting_ts < end_vesting_ts,
+    //     ErrorCode::StartTimestampAfterEnd
+    // );
+
     // New distributor parameters must all be set in the future
-    require!(
-        start_vesting_ts > curr_ts && curr_ts < end_vesting_ts,
-        ErrorCode::TimestampsNotInFuture
-    );
+    // require!(
+    //     start_vesting_ts > curr_ts && curr_ts < end_vesting_ts,
+    //     ErrorCode::TimestampsNotInFuture
+    // );
 
-    require!(
-        clawback_start_ts >= end_vesting_ts,
-        ErrorCode::ClawbackDuringVesting
-    );
+    // require!(
+    //     clawback_start_ts >= end_vesting_ts,
+    //     ErrorCode::ClawbackDuringVesting
+    // );
  
     let distributor = &mut ctx.accounts.distributor;
 
@@ -129,6 +131,7 @@ pub fn handle_new_distributor(
     distributor.clawed_back = false;
     distributor.closable = closable;
     distributor.base = ctx.accounts.base.key();
+    
     distributor.airdrop_bonus = AirdropBonus {
         total_bonus,
         vesting_duration: bonus_vesting_duration,

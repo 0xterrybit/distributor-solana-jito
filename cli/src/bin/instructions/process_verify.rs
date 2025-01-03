@@ -90,4 +90,6 @@ pub fn process_verify(args: &Args, verfify_args: &VerifyArgs) {
             get_associated_token_address(&verfify_args.clawback_receiver_owner, &args.mint);
         assert_eq!(merke_tree_state.clawback_receiver, clawback_receiver);
     }
+
+    
 }

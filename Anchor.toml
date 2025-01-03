@@ -16,8 +16,8 @@ members = [
 
 [provider]
 cluster = "localnet"
-# cluster = "https://solana-devnet.g.alchemy.com/v2/n1bvt38Ftko_vx5iLfOneXpyIxY0VyAQ"
 wallet = "~/.config/solana/rnspay_admin.json"
+# cluster = "https://solana-devnet.g.alchemy.com/v2/n1bvt38Ftko_vx5iLfOneXpyIxY0VyAQ"
 
 [programs.mainnet]
 merkle_distributor = "E15eCY61CRBGV5cSEtKyxgmkDkCLnEgqdmyPSAhuFxc6"
@@ -34,5 +34,33 @@ merkle_distributor = "E15eCY61CRBGV5cSEtKyxgmkDkCLnEgqdmyPSAhuFxc6"
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/*.ts"
 
+[test.validator]
+url = "https://solana-devnet.g.alchemy.com/v2/n1bvt38Ftko_vx5iLfOneXpyIxY0VyAQ"
+[[test.validator.clone]]
+address = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" 
+[[test.validator.clone]]
+address = "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+[[test.validator.clone]]
+address = "BdQwBa4xv7TWuKqfA9Y2ojDAkKfhhqjtwmKhNzkX86Nf"
+[[test.validator.clone]]
+address = "3RyXsvLpMYPJ8JdARFpd1ztNcG7r3JV66myceZvxxoda"
 
+
+# [[test.validator.clone]]
+# address = "11111111111111111111111111111111"
+
+
+
+
+
+# solana-test-validator \
+#   --clone "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" \  # Token Program
+#   --clone "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL" \  # Associated Token Program
+#   --clone "ComputeBudget111111111111111111111111111111"  \ 
+#   --url https://api.mainnet-beta.solana.com
+
+# solana-test-validator \
+#   --clone TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA \
+#   --clone ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL \
+#   --url https://api.mainnet-beta.solana.com
 

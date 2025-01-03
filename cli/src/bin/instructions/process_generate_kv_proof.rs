@@ -8,9 +8,10 @@ use crate::*;
 pub struct KvProof {
     pub merkle_tree: String,
     pub amount: u64,
-    pub locked_amount: u64,
+    // pub locked_amount: u64,
     /// Claimant's proof of inclusion in the Merkle Tree
-    pub proof: Vec<[u8; 32]>,
+    // pub proof: Vec<[u8; 32]>,
+    pub proof: Vec<String>,
 }
 
 pub fn process_generate_kv_proof(args: &Args, generate_kv_proof_args: &GenerateKvProofArgs) {
@@ -26,8 +27,7 @@ pub fn process_generate_kv_proof(args: &Args, generate_kv_proof_args: &GenerateK
     for file in paths {
         let single_tree_path = file.path();
         // println!("file {:?}", file.file_name());
-        let merkle_tree =
-            AirdropMerkleTree::new_from_file(&single_tree_path).expect("failed to read");
+        let merkle_tree = AirdropMerkleTree::new_from_file(&single_tree_path).expect("failed to read");
 
         let (distributor_pubkey, _bump) = get_merkle_distributor_pda(
             &args.program_id,
@@ -38,7 +38,8 @@ pub fn process_generate_kv_proof(args: &Args, generate_kv_proof_args: &GenerateK
 
         println!(
             "distributor version {}: {}",
-            merkle_tree.airdrop_version, distributor_pubkey
+            merkle_tree.airdrop_version,
+            distributor_pubkey
         );
 
         for node in merkle_tree.tree_nodes.iter() {
@@ -48,8 +49,13 @@ pub fn process_generate_kv_proof(args: &Args, generate_kv_proof_args: &GenerateK
                 KvProof {
                     merkle_tree: distributor_pubkey.to_string(),
                     amount: node.amount,
-                    locked_amount: node.locked_amount,
-                    proof: node.proof.clone().unwrap(),
+                    // locked_amount: node.locked_amount,
+                    // proof: node.proof.clone().unwrap(),
+                    proof: node.proof.clone().unwrap()
+                            .iter()
+                            .map(|p| bs58::encode(p).into_string())
+                            .collect(),
+                    
                 },
             );
 
@@ -70,30 +76,6 @@ pub fn process_generate_kv_proof(args: &Args, generate_kv_proof_args: &GenerateK
         write_to_file(generate_kv_proof_args, file_index, &proofs);
     }
 }
-
-// fn write_to_file_zip(
-//     generate_kv_proof_args: &GenerateKvProofArgs,
-//     file_index: u64,
-//     proofs: &HashMap<String, KvProof>,
-// ) {
-//     let path = generate_kv_proof_args
-//         .kv_path
-//         .as_path()
-//         .join(format!("{}.zip", file_index));
-
-//     println!("zip to file {}", file_index);
-//     let serialized = serde_json::to_string_pretty(proofs).unwrap();
-//     let file: File = File::create(path).unwrap();
-//     let mut zip = zip::ZipWriter::new(file);
-//     let options =
-//         zip::write::FileOptions::default().compression_method(zip::CompressionMethod::Stored);
-//     zip.start_file(format!("{}.json", file_index), options)
-//         .unwrap();
-//     zip.write_all(serialized.as_bytes()).unwrap();
-//     // Apply the changes you've made.
-//     // Dropping the `ZipWriter` will have the same effect, but may silently fail
-//     zip.finish().unwrap();
-// }
 
 fn write_to_file(
     generate_kv_proof_args: &GenerateKvProofArgs,

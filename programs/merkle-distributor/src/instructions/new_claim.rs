@@ -100,10 +100,10 @@ pub fn handle_new_claim(
         .checked_add(1)
         .ok_or(ErrorCode::ArithmeticError)?;
 
-    require!(
-        distributor.num_nodes_claimed <= distributor.max_num_nodes,
-        ErrorCode::MaxNodesExceeded
-    );
+    // require!(
+    //     distributor.num_nodes_claimed <= distributor.max_num_nodes,
+    //     ErrorCode::MaxNodesExceeded
+    // );
 
     let claimant_account = &ctx.accounts.claimant;
 
@@ -130,7 +130,6 @@ pub fn handle_new_claim(
     claim_status.closable = distributor.closable;
     claim_status.admin = distributor.admin;
 
-    let unlocked_amount = amount_unlocked;
     let seeds = [
         b"MerkleDistributor".as_ref(),
         &distributor.base.to_bytes(),
@@ -139,8 +138,10 @@ pub fn handle_new_claim(
         &[ctx.accounts.distributor.bump],
     ];
 
+    let unlocked_amount = amount_unlocked;
     let bonus = distributor.get_bonus_for_a_claimaint(unlocked_amount, &activation_handler)?;
     claim_status.unlocked_amount = unlocked_amount.safe_add(bonus)?;
+
     token::transfer(
         CpiContext::new(
             ctx.accounts.token_program.to_account_info(),
@@ -153,6 +154,7 @@ pub fn handle_new_claim(
         .with_signer(&[&seeds[..]]),
         claim_status.unlocked_amount,
     )?;
+    
     let distributor = &mut ctx.accounts.distributor;
     distributor.total_amount_claimed = distributor
         .total_amount_claimed

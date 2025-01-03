@@ -51,11 +51,11 @@ pub fn handle_clawback(ctx: Context<Clawback>) -> Result<()> {
 
     require!(!distributor.clawed_back, ErrorCode::ClawbackAlreadyClaimed);
 
-    let curr_ts = Clock::get()?.unix_timestamp;
+    // let curr_ts = Clock::get()?.unix_timestamp;
 
-    if curr_ts < distributor.clawback_start_ts {
-        return Err(ErrorCode::ClawbackBeforeStart.into());
-    }
+    // if curr_ts < distributor.clawback_start_ts {
+    //     return Err(ErrorCode::ClawbackBeforeStart.into());
+    // }
 
     let seeds = [
         b"MerkleDistributor".as_ref(),
