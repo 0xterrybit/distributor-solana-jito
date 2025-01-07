@@ -3,14 +3,14 @@ cli=$root/target/debug/cli
 home_directory="$HOME"
 
 # csv_path="[path to csv]"
-csv_path="${root}/list/test_1_7.csv"
+csv_path="${root}/list/test.csv"
 merkle_tree_path="${root}/proofs/mk/test_1_7"
 kv_path="${root}/proofs/kv/test_1_7"
 
 decimals="9"
 
-rpc_url="http://localhost:8899"
-# rpc="https://solana-devnet.g.alchemy.com/v2/n1bvt38Ftko_vx5iLfOneXpyIxY0VyAQ"
+# rpc_url="http://localhost:8899"
+# rpc_url="https://solana-devnet.g.alchemy.com/v2/n1bvt38Ftko_vx5iLfOneXpyIxY0VyAQ"
 
 # token_mint="BdQwBa4xv7TWuKqfA9Y2ojDAkKfhhqjtwmKhNzkX86Nf"
 
@@ -44,7 +44,7 @@ echo ""
 
 ## caculated variable, can ignore this
 # kv_path="[path to kv proofs]"
-priority_fee=1000000 # priority fee, can use other number
+priority_fee=1000 # priority fee, can use other number
 max_nodes_per_tree=1000 # default value, can ignore the field
 # program_id="E15eCY61CRBGV5cSEtKyxgmkDkCLnEgqdmyPSAhuFxc6"
 
@@ -68,7 +68,7 @@ cargo run --bin cli -- create-merkle-tree \
     --merkle-tree-path $merkle_tree_path \
     --max-nodes-per-tree $max_nodes_per_tree \
     --decimals $decimals \
-    --version 2
+    --version 3
 
 # echo "deploy distributor"
 # cargo run --bin cli -- --mint $token_mint \
@@ -118,4 +118,4 @@ $cli \
     --base $base_key generate-kv-proof \
     --merkle-tree-path $merkle_tree_path \
     --kv-path $kv_path \
-    --max-entries-per-file 3
+    --max-entries-per-file 1000

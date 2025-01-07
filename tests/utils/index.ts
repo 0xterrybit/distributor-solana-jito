@@ -37,15 +37,16 @@ export class MerkleDistributor {
   constructor(
     private provider: anchor.Provider,
     options: {
+      programId: web3.PublicKey,
       base: web3.PublicKey;
       mint: web3.PublicKey;
       version?: number,
       claimProofEndpoint?: string;
     },
   ) {
-    const program = anchor.workspace.MerkleDistributor as Program<MerkleDistributorType>;
+    // const program = anchor.workspace.MerkleDistributor as Program<MerkleDistributorType>;
 
-    this.mdProgram = createMerkleDistributorProgram(this.provider, program.programId);
+    this.mdProgram = createMerkleDistributorProgram(this.provider, options.programId);
     this.mint = options.mint;
     this.base = options.base;
     this.version = new BN(options.version) || new BN(0);

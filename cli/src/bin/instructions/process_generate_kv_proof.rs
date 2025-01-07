@@ -10,8 +10,8 @@ pub struct KvProof {
     pub amount: u64,
     // pub locked_amount: u64,
     /// Claimant's proof of inclusion in the Merkle Tree
-    // pub proof: Vec<[u8; 32]>,
-    pub proof: Vec<String>,
+    pub proof: Vec<[u8; 32]>,
+    // pub proof: Vec<String>,
 }
 
 pub fn process_generate_kv_proof(args: &Args, generate_kv_proof_args: &GenerateKvProofArgs) {
@@ -51,10 +51,10 @@ pub fn process_generate_kv_proof(args: &Args, generate_kv_proof_args: &GenerateK
                     amount: node.amount,
                     // locked_amount: node.locked_amount,
                     // proof: node.proof.clone().unwrap(),
-                    proof: node.proof.clone().unwrap()
-                            .iter()
-                            .map(|p| bs58::encode(p).into_string())
-                            .collect(),
+                    proof: node.proof.clone().unwrap(),
+                            // .iter()
+                            // .map(|p| bs58::encode(p).into_string())
+                            // .collect(),
                     
                 },
             );

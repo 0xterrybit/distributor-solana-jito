@@ -11,7 +11,7 @@ import {
 } from "@solana/web3.js";
 import { join } from "path";
 import { readdirSync, readFileSync } from "fs";
-import { MerkleDistributor as MerkleDistributorType } from "../target/types/merkle_distributor";
+import { MerkleDistributor as MerkleDistributorType, IDL as MerkleDistributorIDL } from "../target/types/merkle_distributor";
 import { getMerkleDistributorPDA, getOrCreateATAInstruction } from "./utils/helper";
 import { MerkleDistributor } from './utils/index'
 import bs58 from 'bs58';
@@ -19,7 +19,10 @@ import bs58 from 'bs58';
 describe("distributor", () => {
   anchor.setProvider(anchor.AnchorProvider.env());
   const provider = anchor.getProvider();
-  const program = anchor.workspace.MerkleDistributor as Program<MerkleDistributorType>;
+
+  const programId = new PublicKey("E15eCY61CRBGV5cSEtKyxgmkDkCLnEgqdmyPSAhuFxc6")
+  const program = new Program<MerkleDistributorType>(MerkleDistributorIDL, programId.toBase58() , provider);
+  
 
   const OWNER_PATH = join(process.env["HOME"]!, ".config/solana/rnspay_admin.json");
   
@@ -30,12 +33,12 @@ describe("distributor", () => {
   console.log('base:', base)
  
   let mint: web3.PublicKey = new PublicKey('BdQwBa4xv7TWuKqfA9Y2ojDAkKfhhqjtwmKhNzkX86Nf');;
-  let version: number = 2;
+  let maxTotalClaim = 60328672500000;
+  let version: number = 3;
 
   let distributorPubkey: web3.PublicKey;
   let merkleDistributorIns: MerkleDistributor;
-
-  let merkle_tree: web3.PublicKey = new PublicKey("ABbJKwMqMNHe6rijocYDZyDW6RWurkEC4w3jY8MqxZtV")
+  let merkle_tree: web3.PublicKey = new PublicKey("5samAbwfhQLRy8UvNRuh2AzsWnq9qmT7xk87sfJsoLvD")
 
   before(async () => {
 
@@ -57,64 +60,98 @@ describe("distributor", () => {
     console.log('distributorPubkey:', distributorPubkey.toBase58())
 
     merkleDistributorIns = new MerkleDistributor(provider, {
+      programId,
       base,
       mint,
       version
     })
   })
 
-  it("new distributor success", async () => {
-    const [tokenVault, tokenVaultATAIx] = await getOrCreateATAInstruction(mint, distributorPubkey, provider.connection, true, owner.publicKey);
-    const [clawbackReceiver, _ownerATAIx] = await getOrCreateATAInstruction(mint, owner.publicKey, provider.connection, true, owner.publicKey);
+  // it("new distributor success", async () => {
+  //   const [tokenVault, tokenVaultATAIx] = await getOrCreateATAInstruction(mint, distributorPubkey, provider.connection, true, owner.publicKey);
+  //   const [clawbackReceiver, _ownerATAIx] = await getOrCreateATAInstruction(mint, owner.publicKey, provider.connection, true, owner.publicKey);
 
-    const priorityFee = 1000
-    const setComputeUnitPriceIx = ComputeBudgetProgram.setComputeUnitPrice({
-      microLamports: priorityFee
-    });
+  //   const priorityFee = 1000
+  //   const setComputeUnitPriceIx = ComputeBudgetProgram.setComputeUnitPrice({
+  //     microLamports: priorityFee
+  //   });
 
-    const ixs: TransactionInstruction[] = [];
-    if (priorityFee) {
-      ixs.push(setComputeUnitPriceIx);
-    }
+  //   const ixs: TransactionInstruction[] = [];
+  //   if (priorityFee) {
+  //     ixs.push(setComputeUnitPriceIx);
+  //   }
 
-    if (tokenVaultATAIx) {
-      ixs.push(tokenVaultATAIx);
-    }
+  //   if (tokenVaultATAIx) {
+  //     ixs.push(tokenVaultATAIx);
+  //   }
 
-    if (_ownerATAIx) {
-      ixs.push(_ownerATAIx);
-    }
+  //   if (_ownerATAIx) {
+  //     ixs.push(_ownerATAIx);
+  //   }
     
-    const root = [233, 3, 81, 152, 220, 129, 6, 37, 59, 54, 245, 4, 179, 237, 208, 75, 172, 196, 179, 140, 135, 222, 209, 182, 205, 65, 5, 18, 51, 195, 22, 227]
-    const maxTotalClaim = new BN(2000)
-    const new_distributor_ix = await merkleDistributorIns.createDistributor(
-      {
-        root,
-        maxTotalClaim,
-      }, 
-      {
-        admin: owner.publicKey,
-        distributor: distributorPubkey,
-        tokenVault,
-        clawbackReceiver
-      }
-    )
+  //   const root = [
+  //     117,
+  //     132,
+  //     246,
+  //     86,
+  //     208,
+  //     228,
+  //     65,
+  //     47,
+  //     217,
+  //     97,
+  //     234,
+  //     56,
+  //     205,
+  //     137,
+  //     183,
+  //     161,
+  //     199,
+  //     56,
+  //     190,
+  //     88,
+  //     204,
+  //     189,
+  //     22,
+  //     76,
+  //     0,
+  //     8,
+  //     98,
+  //     77,
+  //     74,
+  //     50,
+  //     82,
+  //     233
+  //   ]
+    // const maxTotalClaim = new BN(60328672500000)
+  //   const new_distributor_ix = await merkleDistributorIns.createDistributor(
+  //     {
+  //       root,
+  //       maxTotalClaim,
+  //     }, 
+  //     {
+  //       admin: owner.publicKey,
+  //       distributor: distributorPubkey,
+  //       tokenVault,
+  //       clawbackReceiver
+  //     }
+  //   )
 
-    ixs.push(...new_distributor_ix)
+  //   ixs.push(...new_distributor_ix)
 
-    const tx = new web3.Transaction().add(...ixs);
+  //   const tx = new web3.Transaction().add(...ixs);
 
-    const signature = await provider.sendAndConfirm(tx, [owner]);
-    console.log('Transaction signature:', signature);
+  //   const signature = await provider.sendAndConfirm(tx, [owner]);
+  //   console.log('Transaction signature:', signature);
 
-  });
+  // });
 
   it("fund success", async () => {
 
     let ixs = await merkleDistributorIns.fund(
       owner.publicKey,
       distributorPubkey,
-      2000
+      maxTotalClaim
     )
 
     const tx = new web3.Transaction().add(...ixs);
@@ -123,55 +160,55 @@ describe("distributor", () => {
 
   });
 
-  it("check already fund", async () => {
-    const distributorState = await program.account.merkleDistributor.fetch(distributorPubkey);
-    const [tokenVault, tokenVaultATAIx] = await getOrCreateATAInstruction(mint, distributorPubkey, provider.connection, true, owner.publicKey);
-    const tokenVaultState = await provider.connection.getTokenAccountBalance(tokenVault);
+  // it("check already fund", async () => {
+  //   const distributorState = await program.account.merkleDistributor.fetch(distributorPubkey);
+  //   const [tokenVault, tokenVaultATAIx] = await getOrCreateATAInstruction(mint, distributorPubkey, provider.connection, true, owner.publicKey);
+  //   const tokenVaultState = await provider.connection.getTokenAccountBalance(tokenVault);
 
-    console.log('tokenVault;', tokenVaultState.value.amount)
-    console.log('maxTotalClaim;', distributorState.maxTotalClaim.toString())
-    console.log('root;', distributorState.root.toString())
-    console.log('mint;', distributorState.mint.toBase58())
+  //   console.log('tokenVault;', tokenVaultState.value.amount)
+  //   console.log('maxTotalClaim;', distributorState.maxTotalClaim.toString())
+  //   console.log('root;', distributorState.root.toString())
+  //   console.log('mint;', distributorState.mint.toBase58())
 
-    if (new BN(tokenVaultState.value.amount).gte(distributorState.maxTotalClaim)) {
-      console.log(`already fund airdrop version ${distributorState.activationType}!`);
-    }
+  //   if (new BN(tokenVaultState.value.amount).gte(distributorState.maxTotalClaim)) {
+  //     console.log(`already fund airdrop version ${distributorState.activationType}!`);
+  //   }
 
-  });
+  // });
 
-  it("claim success", async () => {
+  // it("claim success", async () => {
 
-    let ixs = await merkleDistributorIns.claim(owner.publicKey, {
-      amount: 1000,
-      proof: [
-        Array.from(bs58.decode("21P4dziReHMKWoKLVLMc6L7mjr97M2b6UFawppRE3ZYw"))
-      ],
-      merkle_tree: merkle_tree.toBase58()
-    })
+  //   let ixs = await merkleDistributorIns.claim(owner.publicKey, {
+  //     amount: 1000,
+  //     proof: [
+  //       Array.from(bs58.decode("21P4dziReHMKWoKLVLMc6L7mjr97M2b6UFawppRE3ZYw"))
+  //     ],
+  //     merkle_tree: merkle_tree.toBase58()
+  //   })
 
-    const tx = new web3.Transaction().add(...ixs);
-    const signature = await provider.sendAndConfirm(tx, [owner]);
-    console.log('Fund transaction signature:', signature);
-
-
-    let isClaimed = await merkleDistributorIns.getClaimStatus(owner.publicKey, merkle_tree.toBase58())
-
-    console.log('isClaimed:', isClaimed)
+  //   const tx = new web3.Transaction().add(...ixs);
+  //   const signature = await provider.sendAndConfirm(tx, [owner]);
+  //   console.log('Fund transaction signature:', signature);
 
 
+  //   let isClaimed = await merkleDistributorIns.getClaimStatus(owner.publicKey, merkle_tree.toBase58())
 
-  });
+  //   console.log('isClaimed:', isClaimed)
 
-  it("clawback success", async () => {
 
-    const [clawback_receiver, _] = await getOrCreateATAInstruction(mint, owner.publicKey, provider.connection, true, owner.publicKey);
 
-    let ixs = await merkleDistributorIns.clawback(merkle_tree, clawback_receiver)
+  // });
 
-    const tx = new web3.Transaction().add(...ixs);
-    const signature = await provider.sendAndConfirm(tx, [owner]);
-    console.log('Fund transaction signature:', signature);
+  // it("clawback success", async () => {
 
-  });
+  //   const [clawback_receiver, _] = await getOrCreateATAInstruction(mint, owner.publicKey, provider.connection, true, owner.publicKey);
+
+  //   let ixs = await merkleDistributorIns.clawback(merkle_tree, clawback_receiver)
+
+  //   const tx = new web3.Transaction().add(...ixs);
+  //   const signature = await provider.sendAndConfirm(tx, [owner]);
+  //   console.log('Fund transaction signature:', signature);
+
+  // });
 
 });

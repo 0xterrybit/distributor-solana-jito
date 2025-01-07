@@ -12,9 +12,9 @@ members = [
 
 
 [provider]
-cluster = "localnet"
+# cluster = "localnet"
 wallet = "~/.config/solana/rnspay_admin.json"
-# cluster = "https://solana-devnet.g.alchemy.com/v2/n1bvt38Ftko_vx5iLfOneXpyIxY0VyAQ"
+cluster = "https://solana-devnet.g.alchemy.com/v2/n1bvt38Ftko_vx5iLfOneXpyIxY0VyAQ"
 
 [programs.mainnet]
 merkle_distributor = "E15eCY61CRBGV5cSEtKyxgmkDkCLnEgqdmyPSAhuFxc6"
