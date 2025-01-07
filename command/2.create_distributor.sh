@@ -3,11 +3,11 @@ cli=$root/target/debug/cli
 home_directory="$HOME"
 
 # csv_path="[path to csv]"
-csv_path="${root}/list/test.csv"
-merkle_tree_path="${root}/proofs/mk/snapshot"
-kv_path="${root}/proofs/kv/snapshot"
+csv_path="${root}/list/test_1_7.csv"
+merkle_tree_path="${root}/proofs/mk/test_1_7"
+kv_path="${root}/proofs/kv/test_1_7"
 
-decimals="0"
+decimals="9"
 
 rpc_url="http://localhost:8899"
 # rpc="https://solana-devnet.g.alchemy.com/v2/n1bvt38Ftko_vx5iLfOneXpyIxY0VyAQ"

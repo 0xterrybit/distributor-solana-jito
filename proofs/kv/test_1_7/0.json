@@ -1,0 +1,26 @@
+{
+  "DV1uorF6pS77pJQWuAKnhM58SLLV5TBG2g27eoNnzNBq": {
+    "merkle_tree": "ABbJKwMqMNHe6rijocYDZyDW6RWurkEC4w3jY8MqxZtV",
+    "amount": 32659312500000,
+    "proof": [
+      "7WJo5XHNUr4oQw26qakDywpAY5FC29oFSdYZvVFRXx1y",
+      "5fYDeDXPqiAXRAGv89wsWhGB2Nq2V5BKy6xtkUMvTQhC"
+    ]
+  },
+  "A5Ho3PsZdPJKkPdyADnfHnrXKphB9VJ5UFbDELWEoZwi": {
+    "merkle_tree": "ABbJKwMqMNHe6rijocYDZyDW6RWurkEC4w3jY8MqxZtV",
+    "amount": 25639000000000,
+    "proof": [
+      "BTjyhMeiP2Zs5ERSAxg4CUbnHEGMnpUAiSE2gJtboRNN",
+      "5fYDeDXPqiAXRAGv89wsWhGB2Nq2V5BKy6xtkUMvTQhC"
+    ]
+  },
+  "8Ez6wwXdS58PyBGxGSB3MQuMRuJsAXaxhMwE79ngVxzU": {
+    "merkle_tree": "ABbJKwMqMNHe6rijocYDZyDW6RWurkEC4w3jY8MqxZtV",
+    "amount": 2030360000000,
+    "proof": [
+      "6JRWPVv615CAVRC4sp25cX84VERoGRZiuVvxC43AG6bD",
+      "GKHv5jbR6t8wezJu1CoxWoHVcNn11817z13iim6nQoXe"
+    ]
+  }
+}

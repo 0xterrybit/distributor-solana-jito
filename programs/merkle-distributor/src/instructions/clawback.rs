@@ -29,7 +29,7 @@ pub struct Clawback<'info> {
     pub to: Account<'info, TokenAccount>,
 
     /// Claimant account
-    /// Anyone can claw back the funds
+    #[account(mut, address = distributor.clawback_receiver)]
     pub claimant: Signer<'info>,
 
     /// The [System] program.

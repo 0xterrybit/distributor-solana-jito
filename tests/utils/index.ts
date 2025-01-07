@@ -180,10 +180,7 @@ export class MerkleDistributor {
 
     const {
       provider: { connection },
-      mdProgram,
       mint,
-      base,
-      version
     } = this;
 
     const [sourceTokenAccount, sourceATAIx] = await getOrCreateATAInstruction(mint, source, connection, true, source);

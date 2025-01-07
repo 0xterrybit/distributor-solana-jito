@@ -630,11 +630,10 @@ export type MerkleDistributor = {
         },
         {
           "name": "claimant",
-          "isMut": false,
+          "isMut": true,
           "isSigner": true,
           "docs": [
-            "Claimant account",
-            "Anyone can claw back the funds"
+            "Claimant account"
           ]
         },
         {
@@ -1789,11 +1788,10 @@ export const IDL: MerkleDistributor = {
         },
         {
           "name": "claimant",
-          "isMut": false,
+          "isMut": true,
           "isSigner": true,
           "docs": [
-            "Claimant account",
-            "Anyone can claw back the funds"
+            "Claimant account"
           ]
         },
         {
